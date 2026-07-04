@@ -1,0 +1,392 @@
+:root {
+  color-scheme: light;
+  --ink: #1e2630;
+  --muted: #657283;
+  --line: #dce4ec;
+  --paper: #f7f8fb;
+  --white: #ffffff;
+  --blue: #2563eb;
+  --blue-2: #dbeafe;
+  --green: #16805f;
+  --green-2: #dff7ed;
+  --amber: #a16207;
+  --amber-2: #fff3c4;
+  --red: #b42318;
+  --shadow: 0 14px 34px rgba(30, 38, 48, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    linear-gradient(180deg, rgba(219, 234, 254, 0.65), rgba(247, 248, 251, 0) 360px),
+    var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: #aebdcb;
+}
+
+.primary {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.ghost {
+  color: var(--muted);
+}
+
+.wide {
+  width: 100%;
+}
+
+.app-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 30px 0 42px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 22px;
+  align-items: end;
+  padding: 30px 0 18px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: 42px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+.hero-copy {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.score-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.score-board div,
+.dashboard article,
+.metrics article,
+.plan-table,
+.control-bar {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.score-board div {
+  padding: 18px 16px;
+}
+
+.score-board span,
+.target-grid span,
+.section-title span,
+.history span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.score-board strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 30px;
+}
+
+.score-board em {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--green);
+  font-style: normal;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.score-board div:nth-child(3) em {
+  color: var(--amber);
+}
+
+.control-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto auto auto;
+  gap: 12px;
+  align-items: end;
+  padding: 16px;
+  margin: 12px 0 18px;
+}
+
+label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--white);
+}
+
+label input {
+  display: block;
+  margin-top: 6px;
+}
+
+.dashboard,
+.metrics {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.dashboard article,
+.metrics article,
+.plan-table {
+  padding: 20px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.section-title.compact {
+  align-items: center;
+}
+
+.badge,
+.status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: var(--blue-2);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status.done {
+  background: var(--green-2);
+  color: var(--green);
+}
+
+.workout-list,
+.check-list {
+  display: grid;
+  gap: 10px;
+}
+
+.workout-item {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 13px;
+  color: var(--ink);
+  background: #fbfdff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.workout-item input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: var(--blue);
+}
+
+.note-box {
+  margin-top: 14px;
+  border-left: 4px solid var(--amber);
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: var(--amber-2);
+  color: #513a08;
+  line-height: 1.6;
+}
+
+.memo-label {
+  display: block;
+  margin: 14px 0;
+}
+
+.memo-label textarea {
+  display: block;
+  margin-top: 8px;
+  resize: vertical;
+}
+
+.metric-form {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) auto;
+  gap: 10px;
+}
+
+.history {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: 110px repeat(4, 1fr);
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+}
+
+.progress-wrap {
+  height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e6edf5;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transition: width 0.2s ease;
+}
+
+.target-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.target-grid div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.target-grid strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 18px;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.day-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 13px;
+  min-height: 154px;
+  background: #fbfdff;
+}
+
+.day-card strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.day-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.day-card.today {
+  border-color: var(--blue);
+  background: var(--blue-2);
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .dashboard,
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .control-bar,
+  .metric-form,
+  .week-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-board,
+  .target-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 34px;
+  }
+
+  .history-item {
+    grid-template-columns: 1fr 1fr;
+  }
+}
