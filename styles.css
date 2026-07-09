@@ -189,9 +189,13 @@ label input {
 .dashboard,
 .metrics {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr;
   gap: 18px;
   margin-bottom: 18px;
+}
+
+.metrics {
+  grid-template-columns: 1.1fr 0.9fr;
 }
 
 .dashboard article,
@@ -221,6 +225,14 @@ label input {
   color: var(--blue);
   font-size: 13px;
   font-weight: 800;
+}
+
+.status-stack {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .status.done {
