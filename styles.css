@@ -109,7 +109,7 @@ h2 {
 
 .score-board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
@@ -152,7 +152,7 @@ h2 {
   font-weight: 800;
 }
 
-.score-board div:nth-child(3) em {
+.score-board div:nth-child(1) em {
   color: var(--amber);
 }
 
@@ -279,7 +279,7 @@ label input {
 
 .metric-form {
   display: grid;
-  grid-template-columns: repeat(5, 1fr) auto;
+  grid-template-columns: repeat(6, 1fr) auto;
   gap: 10px;
 }
 
@@ -291,7 +291,7 @@ label input {
 
 .history-item {
   display: grid;
-  grid-template-columns: 110px repeat(4, 1fr);
+  grid-template-columns: 110px repeat(6, 1fr);
   gap: 8px;
   align-items: center;
   border-bottom: 1px solid var(--line);
