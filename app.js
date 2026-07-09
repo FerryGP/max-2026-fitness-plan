@@ -1,49 +1,57 @@
 const plan = [
   {
     day: "周一",
-    title: "短跑技术",
-    items: ["热身 10 分钟：慢跑 + 活动脚踝膝盖髋部", "高抬腿、小步跑、后蹬跑各 3 组", "30 米加速跑 4 组，组间走回恢复", "50 米计时 2 组，只追求动作稳"],
-    note: "今天练速度，不练耐力。跑完仍然能说话，说明强度正好。"
+    title: "短跑技术 + 轻有氧",
+    items: ["热身 10 分钟：慢跑 + 活动脚踝膝盖髋部", "高抬腿、小步跑、后蹬跑各 3 组", "30 米加速跑 4 组，组间走回恢复", "50 米计时 2 组，只追求动作稳", "饭后散步 15-20 分钟"],
+    note: "今天练速度，也补一点日常活动量。50 米先把 10.10s 稳定推进到 9.70s。"
   },
   {
     day: "周二",
     title: "跳绳 + 核心",
-    items: ["1 分钟跳绳 3 组，记录最好成绩", "30 秒快速跳 3 组", "仰卧起坐 3 组，每组留 2 个余量", "平板支撑 3 组，每组 25-40 秒"],
-    note: "跳绳保持优势，核心力量会反过来帮 50 米起跑。"
+    items: ["1 分钟跳绳 3 组，目标 155-165 个", "30 秒快速跳 3 组", "仰卧起坐 4 组：12/12/10/8，动作标准", "平板支撑 3 组，每组 25-40 秒"],
+    note: "跳绳已经是优势项目，别天天冲极限；仰卧起坐先从 39 稳到 40+。"
   },
   {
     day: "周三",
-    title: "轻松有氧",
-    items: ["慢跑、骑车、游泳或球类 20-30 分钟", "全程轻松，不冲刺", "拉伸小腿、大腿后侧、髋部 8 分钟"],
-    note: "BMI 管理靠长期活动量，不靠饿肚子。今天要轻松，但别完全躺平。"
+    title: "BMI 管理有氧",
+    items: ["慢跑、骑车、游泳或球类 30-35 分钟", "全程轻松，不冲刺，能完整说话", "拉伸小腿、大腿后侧、髋部 8 分钟", "今天不喝含糖饮料"],
+    note: "身高 140cm、体重 45kg 时 BMI 约 23.0。先靠稳定活动量和饮食习惯，把它拉回 22.6 以内。"
   },
   {
     day: "周四",
     title: "50 米专项",
-    items: ["起跑反应 6 次：听口令启动", "20 米冲刺 4 组", "50 米跑 2-3 组，记录最快一次", "10 米折返跑 4 组，为五年级做准备"],
-    note: "最重要的一天。质量比数量重要，跑姿散了就停。"
+    items: ["起跑反应 6 次：听口令启动", "20 米冲刺 4 组", "50 米跑 2-3 组，记录最快一次", "10 米折返跑 4 组，为五年级做准备", "跑后慢走 8 分钟放松"],
+    note: "最重要的一天。质量比数量重要，跑姿散了就停，目标是动作顺、步频快。"
   },
   {
     day: "周五",
     title: "综合力量",
-    items: ["徒手深蹲 3 组，每组 10-12 个", "弓步走 2 组，每组 8-10 步", "提踵 3 组，每组 15 个", "臀桥 3 组，每组 12 个", "跳绳 1 分钟 2 组"],
-    note: "力量训练不要负重，动作标准比数量更重要。"
+    items: ["徒手深蹲 3 组，每组 10-12 个", "弓步走 2 组，每组 8-10 步", "提踵 3 组，每组 15 个", "臀桥 3 组，每组 12 个", "仰卧起坐 1 分钟小测 1 次"],
+    note: "力量训练不要负重。下肢力量帮 50 米，核心稳定帮仰卧起坐和跑姿。"
   },
   {
     day: "周六",
     title: "模拟小测",
-    items: ["50 米计时 1-2 次", "1 分钟跳绳 1 次", "1 分钟仰卧起坐 1 次", "测体重，写一句本周感受"],
-    note: "今天是看趋势，不是审判日。成绩波动很正常。"
+    items: ["50 米计时 1-2 次", "1 分钟跳绳 1 次", "1 分钟仰卧起坐 1 次", "测身高和体重，自动算 BMI", "写一句本周感受"],
+    note: "今天是看趋势，不是审判日。BMI 看周趋势，50 米看最好成绩和动作质量。"
   },
   {
     day: "周日",
     title: "休息恢复",
-    items: ["散步 20 分钟或户外轻松玩", "拉伸 8 分钟", "不喝含糖饮料，早点睡"],
+    items: ["散步 30 分钟或户外轻松玩", "拉伸 8 分钟", "不喝含糖饮料，早点睡"],
     note: "恢复也是训练的一部分。休息好，下周才跑得动。"
   }
 ];
 
 const storageKey = "fitness-summer-plan-v1";
+const baselineMetric = {
+  date: "2026-07-09",
+  sprint50: "10.10",
+  rope: "160",
+  situps: "39",
+  height: "140",
+  weight: "45"
+};
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const el = (id) => document.getElementById(id);
 
@@ -52,6 +60,9 @@ state.startDate ||= "2026-07-06";
 state.reminderTime ||= "19:30";
 state.days ||= {};
 state.metrics ||= [];
+if (!state.metrics.some((row) => row.date === baselineMetric.date)) {
+  state.metrics.push(baselineMetric);
+}
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
@@ -64,6 +75,13 @@ function dateDiffDays(a, b) {
 
 function currentDayIndex() {
   return Math.max(0, dateDiffDays(todayISO(), state.startDate));
+}
+
+function calcBmi(heightCm, weightKg) {
+  const heightM = Number(heightCm) / 100;
+  const weight = Number(weightKg);
+  if (!heightM || !weight) return "";
+  return (weight / (heightM * heightM)).toFixed(1);
 }
 
 function planForDate(date) {
@@ -140,7 +158,9 @@ function renderMetrics() {
       <span>50米 ${row.sprint50 || "-"}s</span>
       <span>跳绳 ${row.rope || "-"}个</span>
       <span>仰卧 ${row.situps || "-"}个</span>
+      <span>身高 ${row.height || "-"}cm</span>
       <span>体重 ${row.weight || "-"}kg</span>
+      <span>BMI ${calcBmi(row.height, row.weight) || "-"}</span>
     </div>
   `).join("") : `<p class="empty">还没有记录。周六测一次，慢慢看趋势。</p>`;
 }
@@ -288,6 +308,7 @@ el("metricForm").addEventListener("submit", (event) => {
     sprint50: el("sprint50").value,
     rope: el("rope").value,
     situps: el("situps").value,
+    height: el("height").value,
     weight: el("weight").value
   };
   state.metrics = state.metrics.filter((item) => item.date !== row.date);
