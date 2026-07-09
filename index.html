@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Max · 二六年暑期体测满分计划</title>
-    <link rel="stylesheet" href="styles.css?v=20260709-simple-rope">
+    <link rel="stylesheet" href="styles.css?v=20260709-margin-plan">
   </head>
   <body>
     <main class="app-shell">
@@ -12,7 +12,7 @@
         <div>
           <p class="eyebrow">小学四年级体测 · 2026 暑期</p>
           <h1>Max · 二六年暑期体测满分计划</h1>
-          <p class="hero-copy">今天测试估分约 100 分，四年级中考过程性分已稳；暑期主线改为先减重、每天跳绳，其他项目自然带动。</p>
+          <p class="hero-copy">今天测试估分约 100 分，四年级中考过程性分已稳；暑期主线是先减重、跳绳留余量、每天拉伸。</p>
         </div>
         <div class="score-board" aria-label="当前体测基线">
           <div>
@@ -28,12 +28,12 @@
           <div>
             <span>每日必练</span>
             <strong>跳绳</strong>
-            <em>稳住 165+</em>
+            <em>冲 180+</em>
           </div>
           <div>
             <span>仰卧起坐</span>
             <strong>42</strong>
-            <em>90 分</em>
+            <em>目标 49+</em>
           </div>
         </div>
       </section>
@@ -56,24 +56,16 @@
         <article class="today-panel">
           <div class="section-title">
             <div>
-              <p class="eyebrow">今日训练</p>
+              <p class="eyebrow">今日训练打卡</p>
               <h2 id="todayTitle">加载中</h2>
             </div>
-            <span id="weekBadge" class="badge">第 1 周</span>
-          </div>
-          <div id="todayWorkout" class="workout-list"></div>
-          <div class="note-box" id="coachNote"></div>
-        </article>
-
-        <article class="check-panel">
-          <div class="section-title">
-            <div>
-              <p class="eyebrow">打卡</p>
-              <h2>今天完成了吗</h2>
+            <div class="status-stack">
+              <span id="weekBadge" class="badge">第 1 周</span>
+              <span id="todayStatus" class="status">未打卡</span>
             </div>
-            <span id="todayStatus" class="status">未打卡</span>
           </div>
           <div id="checkItems" class="check-list"></div>
+          <div class="note-box" id="coachNote"></div>
           <label class="memo-label">
             今日备注
             <textarea id="dailyMemo" rows="4" placeholder="比如：50米跑姿更稳了；天气太热改成游泳。"></textarea>
@@ -112,9 +104,9 @@
           </div>
           <div class="target-grid">
             <div><span>第一目标</span><strong>BMI 22.6 内</strong></div>
-            <div><span>每日主项</span><strong>跳绳 10-15 分钟</strong></div>
+            <div><span>跳绳目标</span><strong>180+ 留余量</strong></div>
             <div><span>50米顺带目标</span><strong>10.50s 内</strong></div>
-            <div><span>仰卧顺带目标</span><strong>45+</strong></div>
+            <div><span>仰卧目标</span><strong>49+ 满分线</strong></div>
           </div>
         </article>
       </section>
@@ -135,6 +127,6 @@
       </label>
     </template>
 
-    <script src="app.js?v=20260709-simple-rope"></script>
+    <script src="app.js?v=20260709-margin-plan"></script>
   </body>
 </html>
