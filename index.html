@@ -10,25 +10,30 @@
     <main class="app-shell">
       <section class="hero">
         <div>
-          <p class="eyebrow">小学体测 · 四升五暑期</p>
+          <p class="eyebrow">小学四年级体测 · 2026 暑期</p>
           <h1>Max · 二六年暑期体测满分计划</h1>
-          <p class="hero-copy">主攻 50 米提速和 BMI 管理，保持跳绳、柔韧、肺活量和核心力量。</p>
+          <p class="hero-copy">当前重点是 BMI 管理和 50 米提速；跳绳保持加分优势，仰卧起坐从 39 个稳住冲 43+。</p>
         </div>
-        <div class="score-board" aria-label="2024 年体测结果">
+        <div class="score-board" aria-label="当前体测基线">
           <div>
-            <span>2024 总分</span>
-            <strong>103.6</strong>
-            <em>优秀</em>
+            <span>当前 BMI</span>
+            <strong>23.0</strong>
+            <em>先回 22.6 内</em>
           </div>
           <div>
             <span>50 米</span>
             <strong>10.10s</strong>
-            <em>重点提升</em>
+            <em>先冲 9.70s</em>
           </div>
           <div>
-            <span>BMI</span>
-            <strong>18.54</strong>
-            <em>超重档</em>
+            <span>跳绳</span>
+            <strong>160</strong>
+            <em>优势加分</em>
+          </div>
+          <div>
+            <span>仰卧起坐</span>
+            <strong>39</strong>
+            <em>差 1 个到 85 分</em>
           </div>
         </div>
       </section>
@@ -88,6 +93,7 @@
             <input id="sprint50" type="number" step="0.01" min="0" placeholder="50米 秒">
             <input id="rope" type="number" step="1" min="0" placeholder="跳绳 个/分钟">
             <input id="situps" type="number" step="1" min="0" placeholder="仰卧起坐 个/分钟">
+            <input id="height" type="number" step="0.1" min="0" placeholder="身高 cm">
             <input id="weight" type="number" step="0.1" min="0" placeholder="体重 kg">
             <button class="primary" type="submit">保存</button>
           </form>
@@ -103,10 +109,10 @@
             <div id="progressBar" class="progress-bar"></div>
           </div>
           <div class="target-grid">
-            <div><span>50米目标</span><strong>9.60s 内</strong></div>
-            <div><span>跳绳保持</span><strong>150+</strong></div>
-            <div><span>仰卧起坐</span><strong>40+</strong></div>
-            <div><span>BMI策略</span><strong>控糖控零食</strong></div>
+            <div><span>BMI 阶段目标</span><strong>22.6 以内</strong></div>
+            <div><span>50米阶段目标</span><strong>9.70s 内</strong></div>
+            <div><span>跳绳保持</span><strong>155-165</strong></div>
+            <div><span>仰卧起坐</span><strong>43+</strong></div>
           </div>
         </article>
       </section>
