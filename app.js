@@ -1,56 +1,61 @@
 const plan = [
   {
     day: "周一",
-    title: "短跑技术 + 轻有氧",
-    items: ["热身 10 分钟：慢跑 + 活动脚踝膝盖髋部", "高抬腿、小步跑、后蹬跑各 3 组", "30 米加速跑 4 组，组间走回恢复", "50 米计时 2 组，只追求动作稳", "饭后散步 15-20 分钟"],
-    note: "今天练速度，也补一点日常活动量。50 米先把 10.10s 稳定推进到 9.70s。"
+    title: "标准跳绳日",
+    items: ["热身 5 分钟：慢跑或原地活动", "跳绳 1 分钟 × 6 组，组间休息 1 分钟", "饭后散步 20 分钟", "不喝含糖饮料"],
+    note: "今天只做基础量。目标不是累趴，是把每天消耗稳定做出来。"
   },
   {
     day: "周二",
     title: "跳绳 + 核心",
-    items: ["1 分钟跳绳 3 组，目标 155-165 个", "30 秒快速跳 3 组", "仰卧起坐 4 组：12/12/10/8，动作标准", "平板支撑 3 组，每组 25-40 秒"],
-    note: "跳绳已经是优势项目，别天天冲极限；仰卧起坐先从 39 稳到 40+。"
+    items: ["跳绳 12 分钟：轻松跳为主，中间插 3 次快跳", "仰卧起坐 3 组，每组 12-15 个", "平板支撑 2 组，每组 30 秒", "饭后散步 15 分钟"],
+    note: "核心只做一点点辅助。跳绳和体重下降，才是让仰卧起坐更轻松的主因。"
   },
   {
     day: "周三",
-    title: "BMI 管理有氧",
-    items: ["慢跑、骑车、游泳或球类 30-35 分钟", "全程轻松，不冲刺，能完整说话", "拉伸小腿、大腿后侧、髋部 8 分钟", "今天不喝含糖饮料"],
-    note: "身高 140cm、体重 45kg 时 BMI 约 23.0。先靠稳定活动量和饮食习惯，把它拉回 22.6 以内。"
+    title: "轻松减重日",
+    items: ["跳绳 8-10 分钟，轻松不断即可", "骑车、游泳、球类或快走 25 分钟", "拉伸 5 分钟", "晚饭七分饱"],
+    note: "这是最重要的减重日之一。强度低一点没关系，活动时间要够。"
   },
   {
     day: "周四",
-    title: "50 米专项",
-    items: ["起跑反应 6 次：听口令启动", "20 米冲刺 4 组", "50 米跑 2-3 组，记录最快一次", "10 米折返跑 4 组，为五年级做准备", "跑后慢走 8 分钟放松"],
-    note: "最重要的一天。质量比数量重要，跑姿散了就停，目标是动作顺、步频快。"
+    title: "跳绳 + 跑步手感",
+    items: ["跳绳 1 分钟 × 5 组", "高抬腿 2 组 + 20 米加速跑 4 次", "50 米计时 1 次，可选", "跑后慢走 10 分钟"],
+    note: "50 米只保持手感。体重轻了，跑步自然会快，不需要天天硬跑。"
   },
   {
     day: "周五",
-    title: "综合力量",
-    items: ["徒手深蹲 3 组，每组 10-12 个", "弓步走 2 组，每组 8-10 步", "提踵 3 组，每组 15 个", "臀桥 3 组，每组 12 个", "仰卧起坐 1 分钟小测 1 次"],
-    note: "力量训练不要负重。下肢力量帮 50 米，核心稳定帮仰卧起坐和跑姿。"
+    title: "跳绳 + 自重力量",
+    items: ["跳绳 12 分钟", "深蹲 3 组，每组 12 个", "提踵 2 组，每组 15 个", "饭后散步 20 分钟"],
+    note: "力量训练只做简单动作，让膝踝更稳。真正的主菜仍然是跳绳和走路。"
   },
   {
     day: "周六",
-    title: "模拟小测",
-    items: ["50 米计时 1-2 次", "1 分钟跳绳 1 次", "1 分钟仰卧起坐 1 次", "测身高和体重，自动算 BMI", "写一句本周感受"],
-    note: "今天是看趋势，不是审判日。BMI 看周趋势，50 米看最好成绩和动作质量。"
+    title: "周测日",
+    items: ["测体重，记录 BMI", "1 分钟跳绳测 1 次，记录最好成绩", "仰卧起坐测 1 次", "户外活动 30 分钟"],
+    note: "周六只看趋势：体重有没有往下，跳绳能不能稳住。不要因为一次波动影响心情。"
   },
   {
     day: "周日",
-    title: "休息恢复",
-    items: ["散步 30 分钟或户外轻松玩", "拉伸 8 分钟", "不喝含糖饮料，早点睡"],
-    note: "恢复也是训练的一部分。休息好，下周才跑得动。"
+    title: "恢复日",
+    items: ["跳绳 5 分钟，只找手感", "散步或户外玩 30 分钟", "拉伸 5 分钟", "早点睡"],
+    note: "恢复日不追成绩。睡眠、少糖、每天动，是减重能坚持下来的关键。"
   }
 ];
 
 const storageKey = "fitness-summer-plan-v1";
+const baselineVersion = "20260709-rope167-run60";
 const baselineMetric = {
   date: "2026-07-09",
-  sprint50: "10.10",
-  rope: "160",
-  situps: "39",
+  sprint50: "11.10",
+  lung: "2680",
+  flex: "18",
+  rope: "167",
+  situps: "42",
   height: "140",
-  weight: "45"
+  weight: "45",
+  totalScore: "100",
+  middleExamScore: "10/10"
 };
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const el = (id) => document.getElementById(id);
@@ -60,8 +65,10 @@ state.startDate ||= "2026-07-06";
 state.reminderTime ||= "19:30";
 state.days ||= {};
 state.metrics ||= [];
-if (!state.metrics.some((row) => row.date === baselineMetric.date)) {
+if (state.baselineVersion !== baselineVersion) {
+  state.metrics = state.metrics.filter((row) => row.date !== baselineMetric.date);
   state.metrics.push(baselineMetric);
+  state.baselineVersion = baselineVersion;
 }
 
 function saveState() {
@@ -155,7 +162,11 @@ function renderMetrics() {
   history.innerHTML = rows.length ? rows.map((row) => `
     <div class="history-item">
       <strong>${row.date}</strong>
+      <span>估分 ${row.totalScore || "-"}</span>
+      <span>中考 ${row.middleExamScore || "-"}</span>
+      <span>肺活量 ${row.lung || "-"}ml</span>
       <span>50米 ${row.sprint50 || "-"}s</span>
+      <span>坐位 ${row.flex || "-"}cm</span>
       <span>跳绳 ${row.rope || "-"}个</span>
       <span>仰卧 ${row.situps || "-"}个</span>
       <span>身高 ${row.height || "-"}cm</span>
@@ -305,7 +316,9 @@ el("metricForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const row = {
     date: el("metricDate").value || todayISO(),
+    lung: el("lung").value,
     sprint50: el("sprint50").value,
+    flex: el("flex").value,
     rope: el("rope").value,
     situps: el("situps").value,
     height: el("height").value,
