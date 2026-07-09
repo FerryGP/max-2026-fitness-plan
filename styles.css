@@ -279,7 +279,7 @@ label input {
 
 .metric-form {
   display: grid;
-  grid-template-columns: repeat(6, 1fr) auto;
+  grid-template-columns: repeat(8, 1fr) auto;
   gap: 10px;
 }
 
@@ -291,7 +291,7 @@ label input {
 
 .history-item {
   display: grid;
-  grid-template-columns: 110px repeat(6, 1fr);
+  grid-template-columns: 100px repeat(10, minmax(72px, 1fr));
   gap: 8px;
   align-items: center;
   border-bottom: 1px solid var(--line);
