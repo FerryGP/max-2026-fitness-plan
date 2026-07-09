@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Max · 二六年暑期体测满分计划</title>
-    <link rel="stylesheet" href="styles.css?v=20260709-max-baseline">
+    <link rel="stylesheet" href="styles.css?v=20260709-simple-rope">
   </head>
   <body>
     <main class="app-shell">
@@ -12,28 +12,28 @@
         <div>
           <p class="eyebrow">小学四年级体测 · 2026 暑期</p>
           <h1>Max · 二六年暑期体测满分计划</h1>
-          <p class="hero-copy">当前重点是 BMI 管理和 50 米提速；跳绳保持加分优势，仰卧起坐从 39 个稳住冲 43+。</p>
+          <p class="hero-copy">今天测试估分约 100 分，四年级中考过程性分已稳；暑期主线改为先减重、每天跳绳，其他项目自然带动。</p>
         </div>
         <div class="score-board" aria-label="当前体测基线">
           <div>
-            <span>当前 BMI</span>
-            <strong>23.0</strong>
-            <em>先回 22.6 内</em>
+            <span>体测估分</span>
+            <strong>100</strong>
+            <em>中考 10/10</em>
           </div>
           <div>
-            <span>50 米</span>
-            <strong>10.10s</strong>
-            <em>先冲 9.70s</em>
+            <span>训练主线</span>
+            <strong>减重</strong>
+            <em>先控 BMI</em>
           </div>
           <div>
-            <span>跳绳</span>
-            <strong>160</strong>
-            <em>优势加分</em>
+            <span>每日必练</span>
+            <strong>跳绳</strong>
+            <em>稳住 165+</em>
           </div>
           <div>
             <span>仰卧起坐</span>
-            <strong>39</strong>
-            <em>差 1 个到 85 分</em>
+            <strong>42</strong>
+            <em>90 分</em>
           </div>
         </div>
       </section>
@@ -90,7 +90,9 @@
           </div>
           <form id="metricForm" class="metric-form">
             <input id="metricDate" type="date" aria-label="记录日期">
+            <input id="lung" type="number" step="1" min="0" placeholder="肺活量 ml">
             <input id="sprint50" type="number" step="0.01" min="0" placeholder="50米 秒">
+            <input id="flex" type="number" step="0.1" placeholder="坐位体前屈 cm">
             <input id="rope" type="number" step="1" min="0" placeholder="跳绳 个/分钟">
             <input id="situps" type="number" step="1" min="0" placeholder="仰卧起坐 个/分钟">
             <input id="height" type="number" step="0.1" min="0" placeholder="身高 cm">
@@ -109,10 +111,10 @@
             <div id="progressBar" class="progress-bar"></div>
           </div>
           <div class="target-grid">
-            <div><span>BMI 阶段目标</span><strong>22.6 以内</strong></div>
-            <div><span>50米阶段目标</span><strong>9.70s 内</strong></div>
-            <div><span>跳绳保持</span><strong>155-165</strong></div>
-            <div><span>仰卧起坐</span><strong>43+</strong></div>
+            <div><span>第一目标</span><strong>BMI 22.6 内</strong></div>
+            <div><span>每日主项</span><strong>跳绳 10-15 分钟</strong></div>
+            <div><span>50米顺带目标</span><strong>10.50s 内</strong></div>
+            <div><span>仰卧顺带目标</span><strong>45+</strong></div>
           </div>
         </article>
       </section>
@@ -120,7 +122,7 @@
       <section class="plan-table">
         <div class="section-title compact">
           <h2>每周节奏</h2>
-          <span>5练2恢复，暑假能坚持才是王道</span>
+          <span>每天 3-4 件事，照着勾就行</span>
         </div>
         <div id="weeklyPlan" class="week-grid"></div>
       </section>
@@ -133,6 +135,6 @@
       </label>
     </template>
 
-    <script src="app.js?v=20260709-max-baseline"></script>
+    <script src="app.js?v=20260709-simple-rope"></script>
   </body>
 </html>
