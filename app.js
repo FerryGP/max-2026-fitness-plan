@@ -128,11 +128,17 @@ function scoreMetric(row) {
 
   const required = [scores.bmi, scores.lung, scores.sprint50, scores.flex, scores.ropeBase, scores.situps];
   const complete = required.every((score) => score !== null);
-  const total = complete
+  const baseTotal = complete
     ? scores.bmi * 0.15 + scores.lung * 0.15 + scores.sprint50 * 0.2 + scores.flex * 0.1
-      + scores.ropeBase * 0.2 + scores.situps * 0.2 + scores.ropeBonus
+      + scores.ropeBase * 0.2 + scores.situps * 0.2
     : null;
-  return { bmi, scores, total: total === null ? null : Number(total.toFixed(1)) };
+  const total = baseTotal === null ? null : baseTotal + scores.ropeBonus;
+  return {
+    bmi,
+    scores,
+    baseTotal: baseTotal === null ? null : Number(baseTotal.toFixed(1)),
+    total: total === null ? null : Number(total.toFixed(1))
+  };
 }
 
 function planForDate(date) {
@@ -193,6 +199,11 @@ function renderProgress() {
 function renderMetrics() {
   const history = el("metricHistory");
   const rows = [...state.metrics].sort((a, b) => b.date.localeCompare(a.date));
+  const latestResult = rows.length ? scoreMetric(rows[0]) : null;
+  el("latestTotalScore").textContent = latestResult?.total ?? "待录入";
+  el("latestScoreBreakdown").textContent = latestResult?.total === null || latestResult?.total === undefined
+    ? "本机自动计算"
+    : `基础 ${latestResult.baseTotal} + 附加 ${latestResult.scores.ropeBonus}`;
   history.innerHTML = rows.length ? rows.map((row) => {
     const result = scoreMetric(row);
     const score = (value) => value === null ? "-" : value;
@@ -200,6 +211,7 @@ function renderMetrics() {
     <div class="history-item">
       <strong>${row.date}</strong>
       <span>总估分 ${result.total ?? "-"}</span>
+      <span>构成 ${result.baseTotal ?? "-"} + ${result.scores.ropeBonus}</span>
       <span>BMI分 ${score(result.scores.bmi)}</span>
       <span>肺活量分 ${score(result.scores.lung)}</span>
       <span>50米分 ${score(result.scores.sprint50)}</span>
