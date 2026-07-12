@@ -80,6 +80,61 @@ function calcBmi(heightCm, weightKg) {
   return (weight / (heightM * heightM)).toFixed(1);
 }
 
+const scoreLevels = [100, 95, 90, 85, 80, 78, 76, 74, 72, 70, 68, 66, 64, 62, 60, 50, 40, 30, 20, 10];
+const grade4BoyStandards = {
+  lung: [2600, 2500, 2400, 2150, 1900, 1820, 1740, 1660, 1580, 1500, 1420, 1340, 1260, 1180, 1100, 1030, 960, 890, 820, 750],
+  sprint50: [8.7, 8.8, 8.9, 9.0, 9.1, 9.3, 9.5, 9.7, 9.9, 10.1, 10.3, 10.5, 10.7, 10.9, 11.1, 11.3, 11.5, 11.7, 11.9, 12.1],
+  flex: [16.4, 15.0, 13.6, 11.7, 9.8, 8.6, 7.4, 6.2, 5.0, 3.8, 2.6, 1.4, 0.2, -1.0, -2.2, -3.2, -4.2, -5.2, -6.2, -7.2],
+  rope: [137, 132, 127, 121, 115, 108, 101, 94, 87, 80, 73, 66, 59, 52, 45, 42, 39, 36, 33, 30],
+  situps: [49, 46, 43, 40, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7]
+};
+
+function scoreHigher(value, thresholds) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  const index = thresholds.findIndex((threshold) => number >= threshold);
+  return index === -1 ? 0 : scoreLevels[index];
+}
+
+function scoreLower(value, thresholds) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  const index = thresholds.findIndex((threshold) => number <= threshold);
+  return index === -1 ? 0 : scoreLevels[index];
+}
+
+function scoreBmi(bmi) {
+  const number = Number(bmi);
+  if (!Number.isFinite(number)) return null;
+  if (number >= 14.2 && number <= 20.1) return 100;
+  if (number <= 14.1 || (number >= 20.2 && number <= 22.6)) return 80;
+  return 60;
+}
+
+function scoreMetric(row) {
+  const bmi = calcBmi(row.height, row.weight);
+  const scores = {
+    bmi: scoreBmi(bmi),
+    lung: scoreHigher(row.lung, grade4BoyStandards.lung),
+    sprint50: scoreLower(row.sprint50, grade4BoyStandards.sprint50),
+    flex: scoreHigher(row.flex, grade4BoyStandards.flex),
+    ropeBase: scoreHigher(row.rope, grade4BoyStandards.rope),
+    situps: scoreHigher(row.situps, grade4BoyStandards.situps)
+  };
+  const ropeCount = Number(row.rope);
+  scores.ropeBonus = Number.isFinite(ropeCount) && ropeCount > 137
+    ? Math.min(20, Math.floor((ropeCount - 137) / 2))
+    : 0;
+
+  const required = [scores.bmi, scores.lung, scores.sprint50, scores.flex, scores.ropeBase, scores.situps];
+  const complete = required.every((score) => score !== null);
+  const total = complete
+    ? scores.bmi * 0.15 + scores.lung * 0.15 + scores.sprint50 * 0.2 + scores.flex * 0.1
+      + scores.ropeBase * 0.2 + scores.situps * 0.2 + scores.ropeBonus
+    : null;
+  return { bmi, scores, total: total === null ? null : Number(total.toFixed(1)) };
+}
+
 function planForDate(date) {
   const diff = Math.max(0, dateDiffDays(date, state.startDate));
   return plan[diff % 7];
@@ -138,11 +193,20 @@ function renderProgress() {
 function renderMetrics() {
   const history = el("metricHistory");
   const rows = [...state.metrics].sort((a, b) => b.date.localeCompare(a.date));
-  history.innerHTML = rows.length ? rows.map((row) => `
+  history.innerHTML = rows.length ? rows.map((row) => {
+    const result = scoreMetric(row);
+    const score = (value) => value === null ? "-" : value;
+    return `
     <div class="history-item">
       <strong>${row.date}</strong>
-      <span>估分 ${row.totalScore || "-"}</span>
-      <span>中考 ${row.middleExamScore || "-"}</span>
+      <span>总估分 ${result.total ?? "-"}</span>
+      <span>BMI分 ${score(result.scores.bmi)}</span>
+      <span>肺活量分 ${score(result.scores.lung)}</span>
+      <span>50米分 ${score(result.scores.sprint50)}</span>
+      <span>坐位分 ${score(result.scores.flex)}</span>
+      <span>跳绳基础 ${score(result.scores.ropeBase)}</span>
+      <span>跳绳附加 +${result.scores.ropeBonus}</span>
+      <span>仰卧分 ${score(result.scores.situps)}</span>
       <span>肺活量 ${row.lung || "-"}ml</span>
       <span>50米 ${row.sprint50 || "-"}s</span>
       <span>坐位 ${row.flex || "-"}cm</span>
@@ -150,9 +214,27 @@ function renderMetrics() {
       <span>仰卧 ${row.situps || "-"}个</span>
       <span>身高 ${row.height || "-"}cm</span>
       <span>体重 ${row.weight || "-"}kg</span>
-      <span>BMI ${calcBmi(row.height, row.weight) || "-"}</span>
+      <span>BMI ${result.bmi || "-"}</span>
     </div>
-  `).join("") : `<p class="empty">还没有记录。周六测一次，慢慢看趋势。</p>`;
+  `;
+  }).join("") : `<p class="empty">还没有记录。周六测一次，慢慢看趋势。</p>`;
+}
+
+function renderWeightTargets() {
+  const firstWeightRow = state.metrics.find((row) => Number(row.weight) > 0);
+  const startWeight = Number(firstWeightRow?.weight);
+  if (!startWeight) {
+    el("weightGoalHeadline").textContent = "以首次录入体重为起点，六周挑战减 6 kg";
+    for (let week = 0; week <= 6; week += 1) {
+      el(`weightTarget${week}`).textContent = week === 0 ? "首次体重" : `起点 - ${week} kg`;
+    }
+    return;
+  }
+
+  el("weightGoalHeadline").textContent = `从 ${startWeight.toFixed(1)} kg 向 ${(startWeight - 6).toFixed(1)} kg 推进`;
+  for (let week = 0; week <= 6; week += 1) {
+    el(`weightTarget${week}`).textContent = `${(startWeight - week).toFixed(1)} kg`;
+  }
 }
 
 function renderAll() {
@@ -163,6 +245,7 @@ function renderAll() {
   renderWeeklyPlan();
   renderProgress();
   renderMetrics();
+  renderWeightTargets();
 }
 
 function switchTab(panelId) {
@@ -351,6 +434,7 @@ el("metricForm").addEventListener("submit", (event) => {
   event.target.reset();
   el("metricDate").value = todayISO();
   renderMetrics();
+  renderWeightTargets();
 });
 
 renderAll();

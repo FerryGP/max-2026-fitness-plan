@@ -138,7 +138,7 @@
       <div class="tab-panel" id="weightPanel" role="tabpanel" aria-labelledby="weightTab" hidden>
       <section class="diet-banner" aria-label="饮食目标提示">
         <span class="top-banner-label">六周饮食目标</span>
-        <strong>以首次录入体重为起点，六周挑战减 6 kg</strong>
+        <strong id="weightGoalHeadline">以首次录入体重为起点，六周挑战减 6 kg</strong>
         <span>这是挑战目标，不是保证值。儿童短期减重需关注体能和生长发育，建议由儿科或儿童营养医生确认后执行。</span>
       </section>
 
@@ -151,13 +151,13 @@
         <article class="diet-block safety-note">
           <h3>六周目标线</h3>
           <div class="six-week-grid">
-            <div><span>起点</span><strong>首次体重</strong><small>在手机上录入</small></div>
-            <div><span>第 1 周</span><strong>起点 - 1 kg</strong><small>挑战线</small></div>
-            <div><span>第 2 周</span><strong>起点 - 2 kg</strong><small>挑战线</small></div>
-            <div><span>第 3 周</span><strong>起点 - 3 kg</strong><small>挑战线</small></div>
-            <div><span>第 4 周</span><strong>起点 - 4 kg</strong><small>挑战线</small></div>
-            <div><span>第 5 周</span><strong>起点 - 5 kg</strong><small>挑战线</small></div>
-            <div><span>第 6 周</span><strong>起点 - 6 kg</strong><small>最终挑战线</small></div>
+            <div><span>起点</span><strong id="weightTarget0">首次体重</strong><small>在手机上录入</small></div>
+            <div><span>第 1 周</span><strong id="weightTarget1">起点 - 1 kg</strong><small>挑战线</small></div>
+            <div><span>第 2 周</span><strong id="weightTarget2">起点 - 2 kg</strong><small>挑战线</small></div>
+            <div><span>第 3 周</span><strong id="weightTarget3">起点 - 3 kg</strong><small>挑战线</small></div>
+            <div><span>第 4 周</span><strong id="weightTarget4">起点 - 4 kg</strong><small>挑战线</small></div>
+            <div><span>第 5 周</span><strong id="weightTarget5">起点 - 5 kg</strong><small>挑战线</small></div>
+            <div><span>第 6 周</span><strong id="weightTarget6">起点 - 6 kg</strong><small>最终挑战线</small></div>
           </div>
           <p class="safety-copy">每周下降 1 kg 对四年级儿童属于激进速度。若一周下降超过 0.7 kg，或出现乏力、头晕、注意力下降、睡眠变差、跳绳和跑步成绩下降，应停止继续减量并咨询医生。体测前一周以保持体能为先。</p>
         </article>
@@ -278,6 +278,6 @@
       </label>
     </template>
 
-    <script src="app.js?v=20260712-six-week-tabs"></script>
+    <script src="app.js?v=20260712-score-weight-fix"></script>
   </body>
 </html>
