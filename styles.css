@@ -70,6 +70,88 @@ button:hover {
   padding: 30px 0 42px;
 }
 
+.plan-tabs {
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 7px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.plan-tab {
+  min-height: 52px;
+  font-weight: 800;
+}
+
+.plan-tab.active {
+  border-color: var(--blue);
+  color: var(--white);
+  background: var(--blue);
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+.top-banner {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(219, 234, 254, 0.95), rgba(255, 255, 255, 0.95));
+  box-shadow: var(--shadow);
+}
+
+.top-banner-label {
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.top-banner strong {
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.top-banner span:last-child {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.diet-banner {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(22, 128, 95, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(223, 247, 237, 0.95), rgba(255, 255, 255, 0.95));
+  box-shadow: var(--shadow);
+}
+
+.diet-banner strong {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.diet-banner span:last-child {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .hero {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -165,6 +247,27 @@ h2 {
   margin: 12px 0 18px;
 }
 
+.control-hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.control-hint.ok {
+  color: var(--green);
+}
+
+.control-hint.warn {
+  color: var(--amber);
+}
+
+.control-hint.error {
+  color: var(--red);
+}
+
 label {
   color: var(--muted);
   font-size: 13px;
@@ -202,6 +305,155 @@ label input {
 .metrics article,
 .plan-table {
   padding: 20px;
+}
+
+.diet-plan {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.six-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.six-week-grid div {
+  display: grid;
+  gap: 7px;
+  padding: 14px 10px;
+  border: 1px solid rgba(22, 128, 95, 0.2);
+  border-radius: 10px;
+  background: var(--green-2);
+  text-align: center;
+}
+
+.six-week-grid span,
+.six-week-grid small {
+  color: var(--muted);
+}
+
+.six-week-grid strong {
+  font-size: 20px;
+}
+
+.safety-copy {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--amber);
+  border-radius: 6px;
+  color: #513a08;
+  background: var(--amber-2);
+  line-height: 1.65;
+}
+
+.self-check-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.self-check-grid div {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--white);
+}
+
+.self-check-grid p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.memory-line {
+  margin: 14px 0 0;
+  padding: 14px;
+  border-radius: 10px;
+  color: var(--green);
+  background: var(--green-2);
+  font-weight: 800;
+  text-align: center;
+}
+
+.diet-block {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  background: #fcfdff;
+}
+
+.diet-block h3 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.diet-grid,
+.weekly-diet,
+.seven-day-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.diet-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.diet-grid div,
+.weekly-diet div,
+.seven-day-grid div {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.diet-grid strong,
+.weekly-diet strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.diet-grid p,
+.weekly-diet p,
+.seven-day-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.diet-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+
+.diet-list li + li {
+  margin-top: 6px;
+}
+
+.weekly-diet {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.seven-day-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.seven-day-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--blue);
+  font-weight: 800;
 }
 
 .section-title {
@@ -400,5 +652,23 @@ label input {
 
   .history-item {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .diet-grid,
+  .weekly-diet,
+  .seven-day-grid,
+  .six-week-grid,
+  .self-check-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-tabs {
+    top: 6px;
+  }
+
+  .plan-tab {
+    min-height: 58px;
+    padding: 8px;
+    font-size: 14px;
   }
 }

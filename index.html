@@ -4,21 +4,34 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Max · 二六年暑期体测满分计划</title>
-    <link rel="stylesheet" href="styles.css?v=20260709-margin-plan">
+    <link rel="stylesheet" href="styles.css?v=20260712-six-week-tabs">
   </head>
   <body>
     <main class="app-shell">
+      <section class="top-banner" aria-label="体测时间提示">
+        <span class="top-banner-label">开学体测时间</span>
+        <strong>9月14日 - 9月22日</strong>
+        <span>四、六年级体育统测，假期重点准备跳绳和减重训练。</span>
+      </section>
+
+      <nav class="plan-tabs" role="tablist" aria-label="计划切换">
+        <button class="plan-tab active" id="trainingTab" type="button" role="tab" aria-selected="true" aria-controls="trainingPanel" data-tab="trainingPanel">减重训练体测满分计划</button>
+        <button class="plan-tab" id="weightTab" type="button" role="tab" aria-selected="false" aria-controls="weightPanel" data-tab="weightPanel">六周六公斤计划</button>
+      </nav>
+
+      <div class="tab-panel active" id="trainingPanel" role="tabpanel" aria-labelledby="trainingTab">
+
       <section class="hero">
         <div>
           <p class="eyebrow">小学四年级体测 · 2026 暑期</p>
           <h1>Max · 二六年暑期体测满分计划</h1>
-          <p class="hero-copy">今天测试估分约 100 分，四年级中考过程性分已稳；暑期主线是先减重、跳绳留余量、每天拉伸。</p>
+          <p class="hero-copy">暑期主线是控制体重、跳绳留余量、每天拉伸；个人成绩在手机上手动录入并仅保存在本机。</p>
         </div>
-        <div class="score-board" aria-label="当前体测基线">
+        <div class="score-board" aria-label="体测训练目标">
           <div>
-            <span>体测估分</span>
-            <strong>100</strong>
-            <em>中考 10/10</em>
+            <span>成绩记录</span>
+            <strong>本机</strong>
+            <em>手动录入</em>
           </div>
           <div>
             <span>训练主线</span>
@@ -32,7 +45,7 @@
           </div>
           <div>
             <span>仰卧起坐</span>
-            <strong>42</strong>
+            <strong>训练</strong>
             <em>目标 49+</em>
           </div>
         </div>
@@ -50,6 +63,7 @@
         <button id="enableNotify" class="primary">开启浏览器提醒</button>
         <button id="downloadCalendar">生成日历提醒</button>
         <button id="resetToday" class="ghost">清空今天</button>
+        <p id="reminderStatus" class="control-hint" aria-live="polite"></p>
       </section>
 
       <section class="dashboard">
@@ -103,7 +117,7 @@
             <div id="progressBar" class="progress-bar"></div>
           </div>
           <div class="target-grid">
-            <div><span>第一目标</span><strong>BMI 22.6 内</strong></div>
+            <div><span>体重目标</span><strong>每周看趋势</strong></div>
             <div><span>跳绳目标</span><strong>180+ 留余量</strong></div>
             <div><span>50米顺带目标</span><strong>10.50s 内</strong></div>
             <div><span>仰卧目标</span><strong>49+ 满分线</strong></div>
@@ -118,6 +132,143 @@
         </div>
         <div id="weeklyPlan" class="week-grid"></div>
       </section>
+
+      </div>
+
+      <div class="tab-panel" id="weightPanel" role="tabpanel" aria-labelledby="weightTab" hidden>
+      <section class="diet-banner" aria-label="饮食目标提示">
+        <span class="top-banner-label">六周饮食目标</span>
+        <strong>以首次录入体重为起点，六周挑战减 6 kg</strong>
+        <span>这是挑战目标，不是保证值。儿童短期减重需关注体能和生长发育，建议由儿科或儿童营养医生确认后执行。</span>
+      </section>
+
+      <section class="diet-plan">
+        <div class="section-title compact">
+          <h2>六周六公斤计划</h2>
+          <span>每周复盘体重、精神状态和训练表现</span>
+        </div>
+
+        <article class="diet-block safety-note">
+          <h3>六周目标线</h3>
+          <div class="six-week-grid">
+            <div><span>起点</span><strong>首次体重</strong><small>在手机上录入</small></div>
+            <div><span>第 1 周</span><strong>起点 - 1 kg</strong><small>挑战线</small></div>
+            <div><span>第 2 周</span><strong>起点 - 2 kg</strong><small>挑战线</small></div>
+            <div><span>第 3 周</span><strong>起点 - 3 kg</strong><small>挑战线</small></div>
+            <div><span>第 4 周</span><strong>起点 - 4 kg</strong><small>挑战线</small></div>
+            <div><span>第 5 周</span><strong>起点 - 5 kg</strong><small>挑战线</small></div>
+            <div><span>第 6 周</span><strong>起点 - 6 kg</strong><small>最终挑战线</small></div>
+          </div>
+          <p class="safety-copy">每周下降 1 kg 对四年级儿童属于激进速度。若一周下降超过 0.7 kg，或出现乏力、头晕、注意力下降、睡眠变差、跳绳和跑步成绩下降，应停止继续减量并咨询医生。体测前一周以保持体能为先。</p>
+        </article>
+
+        <article class="diet-block">
+          <h3>一、每天的大原则</h3>
+          <div class="diet-grid">
+            <div>
+              <strong>早餐</strong>
+              <p>必须吃。以鸡蛋、牛奶/豆浆、粗粮主食和水果为主，帮助白天不乱吃。</p>
+            </div>
+            <div>
+              <strong>午餐</strong>
+              <p>正常吃，但主食换成玉米、红薯、燕麦、杂粮饭、全麦馒头，量控制在七分饱左右。</p>
+            </div>
+            <div>
+              <strong>晚餐</strong>
+              <p>清淡一点，海鲜优先清蒸、白灼、煮汤，主食少量，尽量不吃油炸和重油做法。</p>
+            </div>
+            <div>
+              <strong>加餐</strong>
+              <p>如果饿，优先水果、无糖酸奶、牛奶。不要拿饼干、薯片、甜饮料顶饿。</p>
+            </div>
+          </div>
+          <ul class="diet-list">
+            <li>主食不吃白米饭，改成粗粮、杂粮、玉米、红薯、燕麦、全麦面包。</li>
+            <li>每餐都要有蛋白质，比如蒸鸡蛋、鱼片、虾、瘦牛肉、豆腐。</li>
+            <li>每天喝 300–500ml 纯牛奶或等量奶制品；两盒合计不超过 500ml 时可以，不能用牛奶代替正餐。</li>
+            <li>海鲜可以吃，但尽量清蒸、白灼、清炖，少油少酱。</li>
+            <li>饮料只喝水、牛奶、无糖豆浆，不喝奶茶和甜饮料。</li>
+            <li>晚饭别吃太晚，睡前不加夜宵。</li>
+          </ul>
+        </article>
+
+        <article class="diet-block">
+          <h3>Max 自己判断的 5 条标准</h3>
+          <div class="self-check-grid">
+            <div><strong>吃饭</strong><p>每餐一掌心蛋白质、两拳蔬菜、一拳粗粮，吃到不饿、不撑。</p></div>
+            <div><strong>饮品</strong><p>每天牛奶 300–500ml，其余主要喝水，不喝甜饮料。</p></div>
+            <div><strong>训练</strong><p>每天累计活动约 60 分钟；能说短句、不能轻松唱歌，强度就够了。</p></div>
+            <div><strong>停止</strong><p>头晕、恶心、胸闷、膝踝疼或动作变形，马上停下来告诉家长。</p></div>
+            <div><strong>复盘</strong><p>每周固定一天晨起称重；精神、睡眠和体测成绩正常才继续。</p></div>
+          </div>
+          <p class="memory-line">记住：不饿肚子、不喝甜饮料、每天动够、身体不难受、成绩不下降。</p>
+        </article>
+
+        <article class="diet-block">
+          <h3>二、按六周推进</h3>
+          <div class="weekly-diet">
+            <div>
+              <strong>第 1 周</strong>
+              <p>先把白米饭换掉，建立粗粮主食习惯，控制零食和饮料。</p>
+            </div>
+            <div>
+              <strong>第 2 周</strong>
+              <p>午餐和晚餐都稳住，晚餐主食再少一点，海鲜尽量清蒸白灼。</p>
+            </div>
+            <div>
+              <strong>第 3 周</strong>
+              <p>继续减油减糖，训练日多一点蛋白质，恢复日减少主食总量。</p>
+            </div>
+            <div>
+              <strong>第 4 周</strong>
+              <p>保持三餐稳定，结合周测结果调整份量，不通过挨饿追赶数字。</p>
+            </div>
+            <div>
+              <strong>第 5 周</strong>
+              <p>继续清淡饮食和规律活动，重点观察跳绳、跑步成绩是否保持。</p>
+            </div>
+            <div>
+              <strong>第 6 周</strong>
+              <p>进入体测准备期，不再激进减量，保证睡眠、饮水和训练恢复。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="diet-block">
+          <h3>三、一周 7 天示例</h3>
+          <div class="seven-day-grid">
+            <div>
+              <span>周一</span>
+              <p>早：蒸鸡蛋 + 牛奶 + 燕麦；中：杂粮饭 + 番茄牛肉 + 西兰花；晚：番茄鱼片汤 + 红薯。</p>
+            </div>
+            <div>
+              <span>周二</span>
+              <p>早：全麦面包 + 蒸鸡蛋 + 牛奶；中：玉米 + 白灼虾 + 西兰花；晚：番茄豆腐汤 + 小半根玉米。</p>
+            </div>
+            <div>
+              <span>周三</span>
+              <p>早：牛奶 + 蒸鸡蛋 + 小杂粮馒头；中：杂粮饭 + 番茄鱼片 + 青菜；晚：西兰花牛肉 + 黄瓜。</p>
+            </div>
+            <div>
+              <span>周四</span>
+              <p>早：牛奶 + 燕麦 + 香蕉；中：红薯 + 番茄牛肉 + 西兰花；晚：番茄蒸蛋 + 少量全麦面包。</p>
+            </div>
+            <div>
+              <span>周五</span>
+              <p>早：蒸鸡蛋 + 无糖酸奶 + 玉米；中：杂粮饭 + 番茄鱼片 + 西兰花；晚：虾仁蒸蛋 + 生菜。</p>
+            </div>
+            <div>
+              <span>周六</span>
+              <p>早：牛奶 + 蒸鸡蛋 + 红薯；中：粗粮饭 + 西兰花牛肉 + 番茄；晚：番茄豆腐鱼片汤。</p>
+            </div>
+            <div>
+              <span>周日</span>
+              <p>早：燕麦粥 + 蒸鸡蛋 + 牛奶；中：玉米 + 番茄牛肉 + 西兰花；晚：番茄鱼片汤 + 少量粗粮。</p>
+            </div>
+          </div>
+        </article>
+      </section>
+      </div>
     </main>
 
     <template id="workoutTemplate">
@@ -127,6 +278,6 @@
       </label>
     </template>
 
-    <script src="app.js?v=20260709-margin-plan"></script>
+    <script src="app.js?v=20260712-six-week-tabs"></script>
   </body>
 </html>

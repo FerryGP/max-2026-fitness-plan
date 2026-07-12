@@ -44,19 +44,6 @@ const plan = [
 ];
 
 const storageKey = "fitness-summer-plan-v1";
-const baselineVersion = "20260709-rope167-run60";
-const baselineMetric = {
-  date: "2026-07-09",
-  sprint50: "11.10",
-  lung: "2680",
-  flex: "18",
-  rope: "167",
-  situps: "42",
-  height: "140",
-  weight: "45",
-  totalScore: "100",
-  middleExamScore: "10/10"
-};
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const el = (id) => document.getElementById(id);
 
@@ -65,14 +52,16 @@ state.startDate ||= "2026-07-06";
 state.reminderTime ||= "19:30";
 state.days ||= {};
 state.metrics ||= [];
-if (state.baselineVersion !== baselineVersion) {
-  state.metrics = state.metrics.filter((row) => row.date !== baselineMetric.date);
-  state.metrics.push(baselineMetric);
-  state.baselineVersion = baselineVersion;
-}
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
+}
+
+function setReminderStatus(message, kind = "") {
+  const box = el("reminderStatus");
+  if (!box) return;
+  box.textContent = message;
+  box.className = `control-hint ${kind}`.trim();
 }
 
 function dateDiffDays(a, b) {
@@ -176,6 +165,20 @@ function renderAll() {
   renderMetrics();
 }
 
+function switchTab(panelId) {
+  document.querySelectorAll(".plan-tab").forEach((tab) => {
+    const selected = tab.dataset.tab === panelId;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", String(selected));
+  });
+  document.querySelectorAll(".tab-panel").forEach((panel) => {
+    const selected = panel.id === panelId;
+    panel.classList.toggle("active", selected);
+    panel.hidden = !selected;
+  });
+  localStorage.setItem("fitness-active-tab", panelId);
+}
+
 function saveToday() {
   const date = todayISO();
   const checks = {};
@@ -202,20 +205,30 @@ function syncCheck(source) {
 
 function enableNotifications() {
   if (!("Notification" in window)) {
-    alert("这个浏览器不支持通知。可以用“生成日历提醒”导入系统日历。");
+    setReminderStatus("当前浏览器不支持网页提醒。华为手机建议直接用“生成日历提醒”导入系统日历。", "warn");
     return;
   }
 
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      new Notification("Max · 二六年暑期体测满分计划", {
-        body: `提醒已开启。每天 ${state.reminderTime} 打开页面时会提示今日训练。`
-      });
-      scheduleBrowserReminder();
-    } else {
-      alert("没有获得通知权限。可以改用日历提醒。");
-    }
-  });
+  if (window.isSecureContext === false && location.protocol !== "https:") {
+    setReminderStatus("当前是本地页面打开，网页提醒权限在手机上常常不可用。建议直接用“生成日历提醒”。", "warn");
+    return;
+  }
+
+  Notification.requestPermission()
+    .then((permission) => {
+      if (permission === "granted") {
+        new Notification("Max · 二六年暑期体测满分计划", {
+          body: `提醒已开启。每天 ${state.reminderTime} 打开页面时会提示今日训练。`
+        });
+        setReminderStatus(`浏览器提醒已开启，每天 ${state.reminderTime} 会提示今日训练。`, "ok");
+        scheduleBrowserReminder();
+        return;
+      }
+      setReminderStatus("没有获得浏览器提醒权限。可以改用“生成日历提醒”。", "warn");
+    })
+    .catch(() => {
+      setReminderStatus("这个手机浏览器的提醒权限被拦截了。建议改用“生成日历提醒”。", "warn");
+    });
 }
 
 let reminderTimer = null;
@@ -265,13 +278,27 @@ function downloadCalendar() {
   }
 
   lines.push("END:VCALENDAR");
-  const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  const ics = lines.join("\r\n");
+  const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+  const fileName = "Max_二六年暑期体测满分计划.ics";
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "Max_二六年暑期体测满分计划.ics";
-  a.click();
-  URL.revokeObjectURL(url);
+  a.download = fileName;
+
+  try {
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setReminderStatus(`日历文件已生成。如果手机没有自动下载，请长按页面或改用系统自带日历导入。`, "ok");
+  } catch (error) {
+    const fallback = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+    window.open(fallback, "_blank", "noopener,noreferrer");
+    URL.revokeObjectURL(url);
+    setReminderStatus("手机浏览器不支持直接下载，已尝试打开日历文件。你也可以复制后导入系统日历。", "warn");
+  } finally {
+    a.remove();
+  }
 }
 
 document.addEventListener("change", (event) => {
@@ -283,6 +310,10 @@ document.addEventListener("change", (event) => {
 el("saveDay").addEventListener("click", saveToday);
 el("enableNotify").addEventListener("click", enableNotifications);
 el("downloadCalendar").addEventListener("click", downloadCalendar);
+
+document.querySelectorAll(".plan-tab").forEach((tab) => {
+  tab.addEventListener("click", () => switchTab(tab.dataset.tab));
+});
 
 el("startDate").addEventListener("change", (event) => {
   state.startDate = event.target.value;
@@ -323,4 +354,5 @@ el("metricForm").addEventListener("submit", (event) => {
 });
 
 renderAll();
+switchTab(localStorage.getItem("fitness-active-tab") || "trainingPanel");
 scheduleBrowserReminder();
