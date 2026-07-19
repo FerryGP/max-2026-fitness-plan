@@ -43,16 +43,6 @@ const plan = [
   }
 ];
 
-const dailyTargets = [
-  { rope: "180+ 个", situps: "35 个", run: "1.0 公里" },
-  { rope: "180+ 个", situps: "45 个", run: "1.0 公里" },
-  { rope: "160+ 个", situps: "30 个", run: "1.5 公里" },
-  { rope: "180+ 个", situps: "35 个", run: "1.2 公里" },
-  { rope: "180+ 个", situps: "40 个", run: "1.0 公里" },
-  { rope: "180+ 个", situps: "49+ 个", run: "1.0 公里" },
-  { rope: "轻松跳 120+", situps: "20 个", run: "0.5 公里" }
-];
-
 const dailyProjects = [
   { key: "rope", name: "跳绳", placeholder: "跳了多少个？", unit: "个", step: "1" },
   { key: "situps", name: "仰卧起坐", placeholder: "做了多少个？", unit: "个", step: "1" },
@@ -162,12 +152,41 @@ function planForDate(date) {
   return plan[diff % 7];
 }
 
+function latestRecordedValue(key, beforeDate) {
+  const dailyValue = Object.entries(state.days)
+    .filter(([date, day]) => date < beforeDate && Number(day.results?.[key]) > 0)
+    .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))[0]?.[1]?.results?.[key];
+  if (Number(dailyValue) > 0) return Number(dailyValue);
+
+  if (key === "rope" || key === "situps") {
+    const metricValue = [...state.metrics]
+      .filter((row) => row.date < beforeDate && Number(row[key]) > 0)
+      .sort((a, b) => b.date.localeCompare(a.date))[0]?.[key];
+    if (Number(metricValue) > 0) return Number(metricValue);
+  }
+  return null;
+}
+
+function targetsForDate(date) {
+  const week = Math.max(1, Math.floor(Math.max(0, dateDiffDays(date, state.startDate)) / 7) + 1);
+  const lastRope = latestRecordedValue("rope", date) || 160;
+  const ropeTarget = Math.max(lastRope, Math.min(180, 160 + week * 5));
+  const lastSitups = latestRecordedValue("situps", date);
+  const lastRun = latestRecordedValue("run", date);
+
+  return {
+    rope: `上次 ${lastRope}，今天 ${ropeTarget}+ 个`,
+    situps: lastSitups ? `上次 ${lastSitups}，今天 ${Math.max(lastSitups, Math.min(49, lastSitups + 2))}+ 个` : "先测一次，不乱定",
+    run: lastRun ? `上次 ${lastRun}，今天 ${(lastRun + 0.2).toFixed(1)} 公里` : "先跑一次，记距离"
+  };
+}
+
 function renderToday() {
   const date = todayISO();
   const workout = planForDate(date);
   const week = Math.min(8, Math.floor(currentDayIndex() / 7) + 1);
   const dayState = state.days[date] || { results: {}, memo: "" };
-  const target = dailyTargets[Math.max(0, dateDiffDays(date, state.startDate)) % 7];
+  const target = targetsForDate(date);
 
   el("todayTitle").textContent = `${workout.day} · ${workout.title}`;
   el("weekBadge").textContent = `第 ${week} 周`;
@@ -196,17 +215,6 @@ function renderToday() {
   el("todayStatus").classList.toggle("done", done);
 }
 
-function renderWeeklyPlan() {
-  const wrap = el("weeklyPlan");
-  const today = planForDate(todayISO()).day;
-  wrap.innerHTML = plan.map((day) => `
-    <div class="day-card ${day.day === today ? "today" : ""}">
-      <strong>${day.day} · ${day.title}</strong>
-      <p>${day.items.join("；")}</p>
-    </div>
-  `).join("");
-}
-
 function renderProgress() {
   const doneDays = Object.values(state.days).filter((day) => {
     return day.done || Object.values(day.results || {}).some((value) => value !== "") || Object.values(day.checks || {}).some(Boolean);
@@ -216,10 +224,32 @@ function renderProgress() {
   el("progressText").textContent = `${doneDays}/56 天`;
 }
 
+function renderDailyHistory() {
+  const rows = Object.entries(state.days)
+    .filter(([, day]) => Object.values(day.results || {}).some((value) => value !== ""))
+    .sort(([dateA], [dateB]) => dateB.localeCompare(dateA))
+    .slice(0, 7);
+  el("dailyHistory").innerHTML = rows.length ? rows.map(([date, day]) => `
+    <div class="daily-history-item">
+      <strong>${date.slice(5).replace("-", "月")}日</strong>
+      <span>跳绳 ${day.results?.rope || "-"} 个</span>
+      <span>仰卧 ${day.results?.situps || "-"} 个</span>
+      <span>跑步 ${day.results?.run || "-"} 公里</span>
+    </div>
+  `).join("") : `<p class="empty">今天练完后，记录会显示在这里。</p>`;
+}
+
 function renderMetrics() {
   const history = el("metricHistory");
   const rows = [...state.metrics].sort((a, b) => b.date.localeCompare(a.date));
-  const latestResult = rows.length ? scoreMetric(rows[0]) : null;
+  const latestDailyRope = latestRecordedValue("rope", "9999-12-31");
+  const latestDailySitups = latestRecordedValue("situps", "9999-12-31");
+  const latestRow = rows.length ? {
+    ...rows[0],
+    rope: latestDailyRope || rows[0].rope,
+    situps: latestDailySitups || rows[0].situps
+  } : null;
+  const latestResult = latestRow ? scoreMetric(latestRow) : null;
   el("latestTotalScore").textContent = latestResult?.total ?? "待录入";
   el("latestScoreBreakdown").textContent = latestResult?.total === null || latestResult?.total === undefined
     ? "本机自动计算"
@@ -227,6 +257,10 @@ function renderMetrics() {
   const latestWeightRow = rows.find((row) => Number(row.weight) > 0);
   el("currentWeight").textContent = latestWeightRow ? `${Number(latestWeightRow.weight).toFixed(1)} kg` : "待录入";
   el("currentWeightDate").textContent = latestWeightRow ? `${latestWeightRow.date} 更新` : "每周记录一次";
+  const currentRope = latestDailyRope || 160;
+  const currentTarget = Number(targetsForDate(todayISO()).rope.match(/今天 (\d+)/)?.[1]) || 180;
+  el("ropeProgress").textContent = `${currentRope} → 180+`;
+  el("ropeProgressHint").textContent = currentRope >= 180 ? "已经达到暑期目标" : `本周先冲 ${currentTarget}`;
   history.innerHTML = rows.length ? rows.map((row) => {
     const result = scoreMetric(row);
     const score = (value) => value === null ? "-" : value;
@@ -279,7 +313,7 @@ function renderAll() {
   el("reminderTime").value = state.reminderTime;
   el("metricDate").value = todayISO();
   renderToday();
-  renderWeeklyPlan();
+  renderDailyHistory();
   renderProgress();
   renderMetrics();
   renderWeightTargets();
@@ -425,15 +459,16 @@ el("resetToday").addEventListener("click", () => {
 
 el("metricForm").addEventListener("submit", (event) => {
   event.preventDefault();
+  const oldRow = state.metrics.find((item) => item.date === (el("metricDate").value || todayISO())) || {};
   const row = {
     date: el("metricDate").value || todayISO(),
-    lung: el("lung").value,
-    sprint50: el("sprint50").value,
-    flex: el("flex").value,
-    rope: el("rope").value,
-    situps: el("situps").value,
-    height: el("height").value,
-    weight: el("weight").value
+    lung: el("lung").value || oldRow.lung || "",
+    sprint50: el("sprint50").value || oldRow.sprint50 || "",
+    flex: el("flex").value || oldRow.flex || "",
+    rope: oldRow.rope || "",
+    situps: oldRow.situps || "",
+    height: el("height").value || oldRow.height || "",
+    weight: el("weight").value || oldRow.weight || ""
   };
   state.metrics = state.metrics.filter((item) => item.date !== row.date);
   state.metrics.push(row);
