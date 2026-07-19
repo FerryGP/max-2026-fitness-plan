@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Max · 二六年暑期体测满分计划</title>
-    <link rel="stylesheet" href="styles.css?v=20260712-six-week-tabs">
+    <link rel="stylesheet" href="styles.css?v=20260719-simple-home">
   </head>
   <body>
     <main class="app-shell">
@@ -14,18 +14,11 @@
         <span>四、六年级体育统测，假期重点准备跳绳和减重训练。</span>
       </section>
 
-      <nav class="plan-tabs" role="tablist" aria-label="计划切换">
-        <button class="plan-tab active" id="trainingTab" type="button" role="tab" aria-selected="true" aria-controls="trainingPanel" data-tab="trainingPanel">减重训练体测满分计划</button>
-        <button class="plan-tab" id="weightTab" type="button" role="tab" aria-selected="false" aria-controls="weightPanel" data-tab="weightPanel">六周六公斤计划</button>
-      </nav>
-
-      <div class="tab-panel active" id="trainingPanel" role="tabpanel" aria-labelledby="trainingTab">
-
       <section class="hero">
         <div>
-          <p class="eyebrow">小学四年级体测 · 2026 暑期</p>
-          <h1>Max · 二六年暑期体测满分计划</h1>
-          <p class="hero-copy">暑期主线是控制体重、跳绳留余量、每天拉伸；个人成绩在手机上手动录入并仅保存在本机。</p>
+          <p class="eyebrow">现在怎么样 · 暑期要做到什么</p>
+          <h1>Max 暑期体测计划</h1>
+          <p class="hero-copy">每天只看今天要做的项目，做完打卡。成绩和饮食细节需要时再展开。</p>
         </div>
         <div class="score-board" aria-label="体测训练目标">
           <div>
@@ -34,24 +27,26 @@
             <em id="latestScoreBreakdown">本机自动计算</em>
           </div>
           <div>
-            <span>训练主线</span>
-            <strong>减重</strong>
-            <em>先控 BMI</em>
+            <span>当前体重</span>
+            <strong id="currentWeight">待录入</strong>
+            <em id="currentWeightDate">每周记录一次</em>
           </div>
           <div>
-            <span>每日必练</span>
-            <strong>跳绳</strong>
-            <em>冲 180+</em>
+            <span>暑期体重目标</span>
+            <strong id="summerWeightGoal">待录入</strong>
+            <em>以首次体重为起点</em>
           </div>
           <div>
-            <span>仰卧起坐</span>
-            <strong>训练</strong>
-            <em>目标 49+</em>
+            <span>跳绳目标</span>
+            <strong>180+</strong>
+            <em>每天练，考试留余量</em>
           </div>
         </div>
       </section>
 
-      <section class="control-bar">
+      <details class="fold-card">
+        <summary>提醒和日期设置</summary>
+      <section class="control-bar inner-card">
         <label>
           暑期开始
           <input id="startDate" type="date">
@@ -65,6 +60,7 @@
         <button id="resetToday" class="ghost">清空今天</button>
         <p id="reminderStatus" class="control-hint" aria-live="polite"></p>
       </section>
+      </details>
 
       <section class="dashboard">
         <article class="today-panel">
@@ -88,7 +84,9 @@
         </article>
       </section>
 
-      <section class="metrics">
+      <details class="fold-card">
+        <summary>成绩记录与暑期进度</summary>
+      <section class="metrics inner-section">
         <article>
           <div class="section-title compact">
             <h2>成绩记录</h2>
@@ -124,18 +122,21 @@
           </div>
         </article>
       </section>
+      </details>
 
-      <section class="plan-table">
+      <details class="fold-card">
+        <summary>查看一周训练安排</summary>
+      <section class="plan-table inner-card">
         <div class="section-title compact">
           <h2>每周节奏</h2>
           <span>每天 3-4 件事，照着勾就行</span>
         </div>
         <div id="weeklyPlan" class="week-grid"></div>
       </section>
+      </details>
 
-      </div>
-
-      <div class="tab-panel" id="weightPanel" role="tabpanel" aria-labelledby="weightTab" hidden>
+      <details class="fold-card">
+      <summary>六周减重与饮食计划</summary>
       <section class="diet-banner" aria-label="饮食目标提示">
         <span class="top-banner-label">六周饮食目标</span>
         <strong id="weightGoalHeadline">以首次录入体重为起点，六周挑战减 6 kg</strong>
@@ -268,7 +269,7 @@
           </div>
         </article>
       </section>
-      </div>
+      </details>
     </main>
 
     <template id="workoutTemplate">
@@ -278,6 +279,6 @@
       </label>
     </template>
 
-    <script src="app.js?v=20260712-score-consistency-fix"></script>
+    <script src="app.js?v=20260719-simple-home"></script>
   </body>
 </html>

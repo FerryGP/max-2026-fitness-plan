@@ -204,6 +204,9 @@ function renderMetrics() {
   el("latestScoreBreakdown").textContent = latestResult?.total === null || latestResult?.total === undefined
     ? "本机自动计算"
     : `基础 ${latestResult.baseTotal} + 附加 ${latestResult.scores.ropeBonus}`;
+  const latestWeightRow = rows.find((row) => Number(row.weight) > 0);
+  el("currentWeight").textContent = latestWeightRow ? `${Number(latestWeightRow.weight).toFixed(1)} kg` : "待录入";
+  el("currentWeightDate").textContent = latestWeightRow ? `${latestWeightRow.date} 更新` : "每周记录一次";
   history.innerHTML = rows.length ? rows.map((row) => {
     const result = scoreMetric(row);
     const score = (value) => value === null ? "-" : value;
@@ -240,6 +243,7 @@ function renderWeightTargets() {
     for (let week = 0; week <= 6; week += 1) {
       el(`weightTarget${week}`).textContent = week === 0 ? "首次体重" : `起点 - ${week} kg`;
     }
+    el("summerWeightGoal").textContent = "待录入";
     return;
   }
 
@@ -247,6 +251,7 @@ function renderWeightTargets() {
   for (let week = 0; week <= 6; week += 1) {
     el(`weightTarget${week}`).textContent = `${(startWeight - week).toFixed(1)} kg`;
   }
+  el("summerWeightGoal").textContent = `${(startWeight - 6).toFixed(1)} kg`;
 }
 
 function renderAll() {
@@ -260,19 +265,6 @@ function renderAll() {
   renderWeightTargets();
 }
 
-function switchTab(panelId) {
-  document.querySelectorAll(".plan-tab").forEach((tab) => {
-    const selected = tab.dataset.tab === panelId;
-    tab.classList.toggle("active", selected);
-    tab.setAttribute("aria-selected", String(selected));
-  });
-  document.querySelectorAll(".tab-panel").forEach((panel) => {
-    const selected = panel.id === panelId;
-    panel.classList.toggle("active", selected);
-    panel.hidden = !selected;
-  });
-  localStorage.setItem("fitness-active-tab", panelId);
-}
 
 function saveToday() {
   const date = todayISO();
@@ -406,9 +398,6 @@ el("saveDay").addEventListener("click", saveToday);
 el("enableNotify").addEventListener("click", enableNotifications);
 el("downloadCalendar").addEventListener("click", downloadCalendar);
 
-document.querySelectorAll(".plan-tab").forEach((tab) => {
-  tab.addEventListener("click", () => switchTab(tab.dataset.tab));
-});
 
 el("startDate").addEventListener("change", (event) => {
   state.startDate = event.target.value;
@@ -450,5 +439,4 @@ el("metricForm").addEventListener("submit", (event) => {
 });
 
 renderAll();
-switchTab(localStorage.getItem("fitness-active-tab") || "trainingPanel");
 scheduleBrowserReminder();

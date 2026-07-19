@@ -70,36 +70,37 @@ button:hover {
   padding: 30px 0 42px;
 }
 
-.plan-tabs {
-  position: sticky;
-  top: 10px;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 16px 0;
-  padding: 7px;
+.fold-card {
+  margin: 0 0 14px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.94);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
-.plan-tab {
-  min-height: 52px;
+.fold-card > summary {
+  padding: 17px 20px;
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 16px;
   font-weight: 800;
+  list-style-position: inside;
 }
 
-.plan-tab.active {
-  border-color: var(--blue);
-  color: var(--white);
-  background: var(--blue);
+.fold-card[open] > summary {
+  border-bottom: 1px solid var(--line);
+  background: #fbfdff;
 }
 
-.tab-panel[hidden] {
-  display: none;
+.inner-card,
+.inner-section {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
+
 
 .top-banner {
   display: grid;
@@ -662,13 +663,4 @@ label input {
     grid-template-columns: 1fr;
   }
 
-  .plan-tabs {
-    top: 6px;
-  }
-
-  .plan-tab {
-    min-height: 58px;
-    padding: 8px;
-    font-size: 14px;
-  }
 }
