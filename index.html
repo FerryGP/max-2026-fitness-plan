@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Max · 二六年暑期体测满分计划</title>
-    <link rel="stylesheet" href="styles.css?v=20260719-simple-home">
+    <link rel="stylesheet" href="styles.css?v=20260719-daily-results">
   </head>
   <body>
     <main class="app-shell">
@@ -18,7 +18,7 @@
         <div>
           <p class="eyebrow">现在怎么样 · 暑期要做到什么</p>
           <h1>Max 暑期体测计划</h1>
-          <p class="hero-copy">每天只看今天要做的项目，做完打卡。成绩和饮食细节需要时再展开。</p>
+          <p class="hero-copy">每天照着“今日任务卡”练，练完把数字填进去，再点保存。</p>
         </div>
         <div class="score-board" aria-label="体测训练目标">
           <div>
@@ -66,7 +66,7 @@
         <article class="today-panel">
           <div class="section-title">
             <div>
-              <p class="eyebrow">今日训练打卡</p>
+              <p class="eyebrow">今日任务卡</p>
               <h2 id="todayTitle">加载中</h2>
             </div>
             <div class="status-stack">
@@ -74,13 +74,18 @@
               <span id="todayStatus" class="status">未打卡</span>
             </div>
           </div>
-          <div id="checkItems" class="check-list"></div>
+          <div class="daily-result-head" aria-hidden="true">
+            <span>今天练什么</span>
+            <span>今天要做到</span>
+            <span>我今天做了</span>
+          </div>
+          <div id="dailyResults" class="daily-results"></div>
           <div class="note-box" id="coachNote"></div>
           <label class="memo-label">
-            今日备注
-            <textarea id="dailyMemo" rows="4" placeholder="比如：50米跑姿更稳了；天气太热改成游泳。"></textarea>
+            今天想说的话（可以不填）
+            <textarea id="dailyMemo" rows="3" placeholder="比如：今天跳绳很轻松；下雨了，在家练。"></textarea>
           </label>
-          <button id="saveDay" class="primary wide">保存今日记录</button>
+          <button id="saveDay" class="primary wide">保存今天的成绩</button>
         </article>
       </section>
 
@@ -272,13 +277,17 @@
       </details>
     </main>
 
-    <template id="workoutTemplate">
-      <label class="workout-item">
-        <input type="checkbox">
-        <span></span>
+    <template id="dailyResultTemplate">
+      <label class="daily-result-item">
+        <strong class="result-name"></strong>
+        <span class="result-target"></span>
+        <span class="result-input-wrap">
+          <input class="result-input" type="number" min="0" inputmode="decimal">
+          <em class="result-unit"></em>
+        </span>
       </label>
     </template>
 
-    <script src="app.js?v=20260719-simple-home"></script>
+    <script src="app.js?v=20260719-daily-results"></script>
   </body>
 </html>

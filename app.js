@@ -43,6 +43,22 @@ const plan = [
   }
 ];
 
+const dailyTargets = [
+  { rope: "180+ 个", situps: "35 个", run: "1.0 公里" },
+  { rope: "180+ 个", situps: "45 个", run: "1.0 公里" },
+  { rope: "160+ 个", situps: "30 个", run: "1.5 公里" },
+  { rope: "180+ 个", situps: "35 个", run: "1.2 公里" },
+  { rope: "180+ 个", situps: "40 个", run: "1.0 公里" },
+  { rope: "180+ 个", situps: "49+ 个", run: "1.0 公里" },
+  { rope: "轻松跳 120+", situps: "20 个", run: "0.5 公里" }
+];
+
+const dailyProjects = [
+  { key: "rope", name: "跳绳", placeholder: "跳了多少个？", unit: "个", step: "1" },
+  { key: "situps", name: "仰卧起坐", placeholder: "做了多少个？", unit: "个", step: "1" },
+  { key: "run", name: "跑步", placeholder: "跑了多远？", unit: "公里", step: "0.1" }
+];
+
 const storageKey = "fitness-summer-plan-v1";
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const el = (id) => document.getElementById(id);
@@ -150,29 +166,33 @@ function renderToday() {
   const date = todayISO();
   const workout = planForDate(date);
   const week = Math.min(8, Math.floor(currentDayIndex() / 7) + 1);
-  const dayState = state.days[date] || { checks: {}, memo: "" };
+  const dayState = state.days[date] || { results: {}, memo: "" };
+  const target = dailyTargets[Math.max(0, dateDiffDays(date, state.startDate)) % 7];
 
   el("todayTitle").textContent = `${workout.day} · ${workout.title}`;
   el("weekBadge").textContent = `第 ${week} 周`;
   el("coachNote").textContent = workout.note;
   el("dailyMemo").value = dayState.memo || "";
 
-  const checks = el("checkItems");
-  checks.innerHTML = "";
+  const results = el("dailyResults");
+  results.innerHTML = "";
 
-  workout.items.forEach((item, index) => {
-    const node = document.getElementById("workoutTemplate").content.cloneNode(true);
+  dailyProjects.forEach((project) => {
+    const node = document.getElementById("dailyResultTemplate").content.cloneNode(true);
     const input = node.querySelector("input");
-    const text = node.querySelector("span");
-    input.checked = Boolean(dayState.checks[index]);
-    input.dataset.index = String(index);
-    text.textContent = item;
-    checks.appendChild(node);
+    node.querySelector(".result-name").textContent = project.name;
+    node.querySelector(".result-target").textContent = target[project.key];
+    node.querySelector(".result-unit").textContent = project.unit;
+    input.value = dayState.results?.[project.key] ?? "";
+    input.placeholder = project.placeholder;
+    input.step = project.step;
+    input.dataset.result = project.key;
+    results.appendChild(node);
   });
 
-  const completeCount = Object.values(dayState.checks || {}).filter(Boolean).length;
-  const done = completeCount === workout.items.length;
-  el("todayStatus").textContent = done ? "已完成" : `已完成 ${completeCount}/${workout.items.length}`;
+  const completeCount = dailyProjects.filter((project) => dayState.results?.[project.key] !== undefined && dayState.results[project.key] !== "").length;
+  const done = completeCount === dailyProjects.length;
+  el("todayStatus").textContent = done ? "已记录" : `已记录 ${completeCount}/${dailyProjects.length}`;
   el("todayStatus").classList.toggle("done", done);
 }
 
@@ -189,7 +209,7 @@ function renderWeeklyPlan() {
 
 function renderProgress() {
   const doneDays = Object.values(state.days).filter((day) => {
-    return day.done || Object.values(day.checks || {}).some(Boolean);
+    return day.done || Object.values(day.results || {}).some((value) => value !== "") || Object.values(day.checks || {}).some(Boolean);
   }).length;
   const percent = Math.min(100, Math.round((doneDays / 56) * 100));
   el("progressBar").style.width = `${percent}%`;
@@ -268,26 +288,18 @@ function renderAll() {
 
 function saveToday() {
   const date = todayISO();
-  const checks = {};
-  document.querySelectorAll("#checkItems input[type='checkbox']").forEach((input) => {
-    checks[input.dataset.index] = input.checked;
+  const results = {};
+  document.querySelectorAll("#dailyResults input[data-result]").forEach((input) => {
+    results[input.dataset.result] = input.value;
   });
-  const workout = planForDate(date);
-  const completeCount = Object.values(checks).filter(Boolean).length;
+  const completeCount = Object.values(results).filter((value) => value !== "").length;
   state.days[date] = {
-    checks,
+    results,
     memo: el("dailyMemo").value.trim(),
-    done: completeCount === workout.items.length
+    done: completeCount === dailyProjects.length
   };
   saveState();
   renderAll();
-}
-
-function syncCheck(source) {
-  const index = source.dataset.index;
-  document.querySelectorAll(`input[data-index='${index}']`).forEach((input) => {
-    input.checked = source.checked;
-  });
 }
 
 function enableNotifications() {
@@ -387,12 +399,6 @@ function downloadCalendar() {
     a.remove();
   }
 }
-
-document.addEventListener("change", (event) => {
-  if (event.target.matches("#checkItems input")) {
-    syncCheck(event.target);
-  }
-});
 
 el("saveDay").addEventListener("click", saveToday);
 el("enableNotify").addEventListener("click", enableNotifications);
