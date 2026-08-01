@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3ead8">
+  <title>Max 的小车旅行记 · 第二个 AI 学习作品</title>
+  <!--
+    Assumptions: 这是路线顺序示意图，不代表精确道路、里程或比例；未写具体日期。
+    Visual motif: 一张贴着地点票签的纸质公路地图，路线是全页唯一视觉主线。
+    Motion: 小车按站点顺序循环行驶；动效偏好为“减少动态”时自动停在起点。
+  -->
+  <style>
+    :root { --ink:#24352f; --muted:#66736c; --paper:#f7f0e2; --sea:#d9e9e5; --road:#d05e43; --gold:#e5ad3f; --green:#597c65; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); background:#c7dad5; font-family:"STKaiti","Kaiti SC","Songti SC",serif; }
+    .page { width:min(1180px,100%); min-height:100vh; margin:auto; padding:clamp(18px,4vw,52px); background:var(--paper); box-shadow:0 0 60px rgb(38 63 55 / .18); overflow:hidden; }
+    header { display:flex; gap:28px; align-items:end; justify-content:space-between; border-bottom:2px solid rgb(36 53 47 / .14); padding-bottom:20px; }
+    .eyebrow { margin:0 0 7px; font:700 12px/1.2 system-ui,sans-serif; letter-spacing:.22em; color:var(--road); }
+    h1 { margin:0; font-size:clamp(31px,5vw,61px); font-weight:700; line-height:1.03; letter-spacing:-.04em; }
+    .summary { flex:none; text-align:right; font:600 clamp(14px,1.7vw,19px)/1.6 system-ui,sans-serif; color:var(--muted); }
+    .summary strong { display:block; color:var(--road); font-size:clamp(24px,3vw,40px); line-height:1; }
+    .map { position:relative; margin-top:24px; min-height:610px; border:1px solid rgb(36 53 47 / .16); background:
+      radial-gradient(circle at 16% 16%,rgb(255 255 255/.75),transparent 25%),
+      repeating-linear-gradient(0deg,transparent 0 39px,rgb(36 53 47/.035) 40px),
+      repeating-linear-gradient(90deg,transparent 0 39px,rgb(36 53 47/.035) 40px),#efe3cc;
+      border-radius:3px; overflow:hidden; }
+    .map::before { content:"路线示意 · 非精确道路比例"; position:absolute; z-index:4; right:16px; top:13px; font:600 11px/1 system-ui,sans-serif; letter-spacing:.08em; color:var(--muted); }
+    svg { display:block; width:100%; height:610px; }
+    .land { fill:#f3ead8; stroke:#8da69a; stroke-width:2; }
+    .sea { fill:var(--sea); }
+    .route-shadow { fill:none; stroke:#fff9ed; stroke-width:13; stroke-linecap:round; stroke-linejoin:round; }
+    .route { fill:none; stroke:var(--road); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:2 11; }
+    .route-progress { fill:none; stroke:var(--gold); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:135 1100; animation:roadPulse 12s linear infinite; }
+    .node { fill:var(--paper); stroke:var(--road); stroke-width:3; }
+    .pass-node { fill:var(--paper); stroke:var(--green); stroke-width:2.5; }
+    .city { font:700 17px/1 system-ui,sans-serif; fill:var(--ink); paint-order:stroke; stroke:var(--paper); stroke-width:5px; stroke-linejoin:round; }
+    .stay { font:600 12px/1 system-ui,sans-serif; fill:var(--road); paint-order:stroke; stroke:var(--paper); stroke-width:4px; }
+    .pass { fill:var(--green); }
+    .car { filter:drop-shadow(0 4px 3px rgb(33 45 41/.28)); }
+    .car-body { fill:#f4b938; stroke:#263a33; stroke-width:2; }
+    .car-window { fill:#dff1ef; stroke:#263a33; stroke-width:1.5; }
+    .wheel { fill:#263a33; }.headlight{fill:#fff1a8;stroke:#263a33;stroke-width:1}.tail-light{fill:#ce5740}
+    .legend { position:absolute; left:16px; bottom:15px; z-index:5; display:flex; gap:14px; flex-wrap:wrap; align-items:center; padding:9px 12px; background:rgb(247 240 226/.92); border:1px solid rgb(36 53 47/.12); font:600 12px/1.2 system-ui,sans-serif; }
+    .car { cursor:pointer; touch-action:manipulation; }
+    .car:focus { outline:none; }.car:focus-visible .car-hit { stroke:var(--gold); stroke-width:4; }
+    .car-hit { fill:transparent; stroke:transparent; }
+    .key { display:flex; align-items:center; gap:6px; } .dot { width:10px;height:10px;border-radius:50%;border:2px solid var(--road); } .dot.pass { border-color:var(--green);background:transparent; }
+    .dates { margin:20px 0 0; padding:16px 20px; background:#24352f; color:#fffaf0; display:flex; align-items:center; gap:18px; font-family:system-ui,sans-serif; }
+    .dates strong { font-size:clamp(19px,2.5vw,28px); white-space:nowrap; }.dates .line{height:2px;flex:1;background:linear-gradient(90deg,var(--gold),#fffaf0,var(--gold));position:relative}.dates .line::before,.dates .line::after{content:"";position:absolute;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--gold)}.dates .line::before{left:0}.dates .line::after{right:0}.dates span{font-size:12px;line-height:1.4;color:#d7dfda;white-space:nowrap;text-align:right}
+    .process { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:16px 0 20px; }
+    .step { position:relative; padding:18px 20px 18px 58px; background:#e5ece4; border-top:3px solid var(--green); font:600 14px/1.55 system-ui,sans-serif; }
+    .step i { position:absolute; left:18px; top:16px; display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--green); color:white; font-style:normal; }
+    .step b { display:block; margin-bottom:3px; color:var(--ink); }.step span{color:var(--muted);font-size:12px;}
+    .itinerary { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; margin-top:20px; background:rgb(36 53 47/.16); border:1px solid rgb(36 53 47/.16); }
+    .stop { min-height:92px; background:var(--paper); padding:13px 12px; font-family:system-ui,sans-serif; }
+    .stop b { display:block; font-size:15px; margin-bottom:5px; } .stop span { color:var(--muted);font-size:12px; } .stop .night { color:var(--road);font-weight:750; }
+    footer { margin-top:16px; display:flex; justify-content:space-between; gap:16px; font:500 12px/1.5 system-ui,sans-serif;color:var(--muted); }
+    @keyframes roadPulse { to { stroke-dashoffset:-1100; } }
+    @media (max-width:760px) { header{align-items:start;flex-direction:column}.summary{text-align:left}.dates{padding:14px;gap:9px}.dates strong{font-size:15px}.dates span{font-size:10px}.process{grid-template-columns:1fr}.map{min-height:540px;overflow-x:auto}svg{width:860px;height:540px}.itinerary{grid-template-columns:repeat(2,1fr)}.page{padding:16px}.city{font-size:15px}.map::before{display:none} }
+    @media (prefers-reduced-motion:reduce) { .route-progress{animation:none}.car animateMotion{display:none} }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header>
+    <div><p class="eyebrow">MAX · MY SECOND AI PROJECT</p><h1>Max 的<br>小车旅行记</h1></div>
+    <div class="summary"><strong>2026.07.25—08.01</strong>第 1 天连云港出发<br>第 8 天回到北京</div>
+  </header>
+
+  <section class="dates" aria-label="旅行起止日期"><strong>7 月 25 日 · 第 1 天</strong><i class="line"></i><span>全程 8 天<br>包含首尾日</span><i class="line"></i><strong>8 月 1 日 · 第 8 天</strong></section>
+
+  <section class="process" aria-label="Max 完成 AI 任务的三个步骤">
+    <div class="step"><i>1</i><b>我先说清目标</b><span>想做一张能看、会动的旅行路线图</span></div>
+    <div class="step"><i>2</i><b>我补齐关键信息</b><span>地点顺序、住几天、哪些地方只是路过</span></div>
+    <div class="step"><i>3</i><b>我让 AI 完成作品</b><span>生成地图，让小车沿着路线循环行驶</span></div>
+  </section>
+
+  <section class="map" aria-label="从连云港经山东多地到北京的旅行路线动画">
+    <svg viewBox="0 0 1080 610" role="img" aria-labelledby="mapTitle mapDesc">
+      <title id="mapTitle">Max 的 8 天旅行路线</title>
+      <desc id="mapDesc">小车从连云港出发，依次经过沂南、沂水、青州、威海、荣成、烟台、蓬莱、莱州，最后到北京。</desc>
+      <rect class="sea" width="1080" height="610"/>
+      <path class="land" d="M0 0H1080V75L1005 91 944 119 905 165 878 214 860 273 813 299 774 322 741 359 699 379 681 427 631 448 591 487 533 497 481 532 397 535 324 564 247 547 169 574 0 558Z"/>
+      <path id="tripPath" class="route-shadow" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
+      <path class="route" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
+      <path class="route-progress" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
+
+      <g><circle class="node" cx="270" cy="494" r="8"/><text class="city" x="218" y="525">连云港</text><text class="stay" x="218" y="543">出发</text></g>
+      <g><circle class="pass-node" cx="335" cy="424" r="7"/><text class="city" x="272" y="410">沂南</text><text class="stay pass" x="272" y="428">路过</text></g>
+      <g><circle class="node" cx="382" cy="379" r="8"/><text class="city" x="397" y="378">沂水</text><text class="stay" x="397" y="396">住 1 天</text></g>
+      <g><circle class="node" cx="485" cy="303" r="8"/><text class="city" x="422" y="284">青州</text><text class="stay" x="422" y="302">住 2 天</text></g>
+      <g><circle class="node" cx="804" cy="272" r="8"/><text class="city" x="815" y="252">威海</text><text class="stay" x="815" y="270">住 2 天</text></g>
+      <g><circle class="pass-node" cx="871" cy="332" r="7"/><text class="city" x="884" y="338">荣成</text><text class="stay pass" x="884" y="356">路过</text></g>
+      <g><circle class="node" cx="760" cy="205" r="8"/><text class="city" x="774" y="192">烟台</text><text class="stay" x="774" y="210">住 2 天</text></g>
+      <g><circle class="pass-node" cx="677" cy="181" r="7"/><text class="city" x="632" y="151">蓬莱</text><text class="stay pass" x="632" y="169">路过</text></g>
+      <g><circle class="node" cx="593" cy="243" r="8"/><text class="city" x="608" y="264">莱州</text><text class="stay" x="608" y="282">住 1 天</text></g>
+      <g><circle class="node" cx="330" cy="70" r="9"/><text class="city" x="347" y="68">北京</text><text class="stay" x="347" y="86">抵达</text></g>
+
+      <g class="car" data-direction="连云港→北京" data-orientation="upright" role="button" tabindex="0" aria-pressed="false" aria-label="暂停小车动画">
+        <!-- 外层只负责沿路线平移，不旋转；内层到荣成后仅水平翻转，因此轮子始终在下、驾驶舱始终在上。 -->
+        <g class="car-facing">
+          <animateTransform attributeName="transform" type="scale" dur="18s" repeatCount="indefinite" calcMode="discrete" values="1 1;1 1;-1 1;-1 1" keyTimes="0;.489;.49;1"/>
+          <rect class="car-hit" x="-31" y="-26" width="62" height="52" rx="12"/>
+          <g transform="translate(-21 -15)"><path class="car-body" d="M3 15h7l5-8h14l7 8h5l4 4-3 7H1v-8l2-3Z"/><path class="car-window" d="m16 9-4 6h9V9Zm7 0v6h10l-5-6Z"/><path class="headlight" d="M40 17h4l1 3-4 1Z"/><rect class="tail-light" x="1" y="17" width="3" height="5" rx="1"/><circle class="wheel" cx="11" cy="27" r="5"/><circle class="wheel" cx="34" cy="27" r="5"/></g>
+        </g>
+        <animateMotion dur="18s" repeatCount="indefinite" rotate="0" keyPoints="0;0.095;0.17;0.29;0.54;0.61;0.73;0.79;0.87;1" keyTimes="0;.10;.17;.25;.42;.49;.61;.68;.76;1" calcMode="linear" restart="always" fill="remove"><mpath href="#tripPath"/></animateMotion>
+      </g>
+    </svg>
+    <div class="legend"><span class="key"><i class="dot"></i>住宿 / 起终点</span><span class="key"><i class="dot pass"></i>路过</span><span>小车约 18 秒一圈 · 点小车暂停／继续</span></div>
+  </section>
+
+  <section class="itinerary" aria-label="各站停留信息">
+    <div class="stop"><b>01 连云港</b><span>出发</span></div><div class="stop"><b>02 沂南</b><span>路过</span></div>
+    <div class="stop"><b>03 沂水</b><span class="night">住 1 天</span></div><div class="stop"><b>04 青州</b><span class="night">住 2 天</span></div>
+    <div class="stop"><b>05 威海</b><span class="night">住 2 天</span></div><div class="stop"><b>06 荣成</b><span>路过</span></div>
+    <div class="stop"><b>07 烟台</b><span class="night">住 2 天</span></div><div class="stop"><b>08 蓬莱</b><span>路过</span></div>
+    <div class="stop"><b>09 莱州</b><span class="night">住 1 天</span></div><div class="stop"><b>10 北京</b><span>抵达</span></div>
+  </section>
+  <footer><span>Max 的第二个 AI 学习任务 · 2026 年 7 月 25 日—8 月 1 日 · 全程共 8 天</span><span>中途各站日期待行程确认 · 路线仅作顺序示意</span></footer>
+</main>
+<script>
+  const mapSvg = document.querySelector('.map svg');
+  const car = document.querySelector('.car');
+  function toggleCar() {
+    const paused = car.getAttribute('aria-pressed') === 'true';
+    if (paused) mapSvg.unpauseAnimations(); else mapSvg.pauseAnimations();
+    car.setAttribute('aria-pressed', String(!paused));
+    car.setAttribute('aria-label', paused ? '暂停小车动画' : '继续小车动画');
+  }
+  car.addEventListener('click', toggleCar);
+  car.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleCar(); }
+  });
+</script>
+</body>
+</html>
