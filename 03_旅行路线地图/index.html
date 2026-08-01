@@ -25,10 +25,9 @@
       repeating-linear-gradient(0deg,transparent 0 39px,rgb(36 53 47/.035) 40px),
       repeating-linear-gradient(90deg,transparent 0 39px,rgb(36 53 47/.035) 40px),#efe3cc;
       border-radius:3px; overflow:hidden; }
-    .map::before { content:"路线示意 · 非精确道路比例"; position:absolute; z-index:4; right:16px; top:13px; font:600 11px/1 system-ui,sans-serif; letter-spacing:.08em; color:var(--muted); }
+    .map::before { content:"行程路线示意 · 不展示行政区界与海岸线"; position:absolute; z-index:4; right:16px; top:13px; font:600 11px/1 system-ui,sans-serif; letter-spacing:.05em; color:var(--muted); }
     svg { display:block; width:100%; height:610px; }
-    .land { fill:#f3ead8; stroke:#8da69a; stroke-width:2; }
-    .sea { fill:var(--sea); }
+    .map-paper { fill:#f3ead8; }
     .route-shadow { fill:none; stroke:#fff9ed; stroke-width:13; stroke-linecap:round; stroke-linejoin:round; }
     .route { fill:none; stroke:var(--road); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:2 11; }
     .route-progress { fill:none; stroke:var(--gold); stroke-width:5; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:135 1100; animation:roadPulse 12s linear infinite; }
@@ -88,8 +87,7 @@
     <svg viewBox="0 0 1080 610" role="img" aria-labelledby="mapTitle mapDesc">
       <title id="mapTitle">Max 的 8 天旅行路线</title>
       <desc id="mapDesc">小车从连云港出发，依次经过沂南、沂水、青州、威海、荣成、烟台、蓬莱、莱州，最后到北京。</desc>
-      <rect class="sea" width="1080" height="610"/>
-      <path class="land" d="M0 0H1080V75L1005 91 944 119 905 165 878 214 860 273 813 299 774 322 741 359 699 379 681 427 631 448 591 487 533 497 481 532 397 535 324 564 247 547 169 574 0 558Z"/>
+      <rect class="map-paper" width="1080" height="610"/>
       <path id="tripPath" class="route-shadow" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
       <path class="route" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
       <path class="route-progress" d="M270 494 L335 424 L382 379 L485 303 L804 272 L871 332 L760 205 L677 181 L593 243 Q487 103 330 70"/>
@@ -127,7 +125,7 @@
     <div class="stop"><b>07 烟台</b><span class="night">住 2 天</span></div><div class="stop"><b>08 蓬莱</b><span>路过</span></div>
     <div class="stop"><b>09 莱州</b><span class="night">住 1 天</span></div><div class="stop"><b>10 北京</b><span>抵达</span></div>
   </section>
-  <footer><span>Max 的第二个 AI 学习任务 · 2026 年 7 月 25 日—8 月 1 日 · 全程共 8 天</span><span>中途各站日期待行程确认 · 路线仅作顺序示意</span></footer>
+  <footer><span>Max 的第二个 AI 学习任务 · 2026 年 7 月 25 日—8 月 1 日 · 全程共 8 天</span><span>中途各站日期待行程确认 · 本图仅表达行程顺序，不作为地理底图</span></footer>
 </main>
 <script>
   const mapSvg = document.querySelector('.map svg');
