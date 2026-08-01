@@ -13,7 +13,7 @@
   <style>
     :root { --ink:#24352f; --muted:#66736c; --paper:#f7f0e2; --sea:#d9e9e5; --road:#d05e43; --gold:#e5ad3f; --green:#597c65; }
     * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; color:var(--ink); background:#c7dad5; font-family:"STKaiti","Kaiti SC","Songti SC",serif; }
+    body { margin:0; min-height:100vh; overflow-x:hidden; color:var(--ink); background:#c7dad5; font-family:"STKaiti","Kaiti SC","Songti SC",serif; }
     .page { width:min(1180px,100%); min-height:100vh; margin:auto; padding:clamp(18px,4vw,52px); background:var(--paper); box-shadow:0 0 60px rgb(38 63 55 / .18); overflow:hidden; }
     header { display:flex; gap:28px; align-items:end; justify-content:space-between; border-bottom:2px solid rgb(36 53 47 / .14); padding-bottom:20px; }
     .eyebrow { margin:0 0 7px; font:700 12px/1.2 system-ui,sans-serif; letter-spacing:.22em; color:var(--road); }
@@ -57,7 +57,15 @@
     .stop b { display:block; font-size:15px; margin-bottom:5px; } .stop span { color:var(--muted);font-size:12px; } .stop .night { color:var(--road);font-weight:750; }
     footer { margin-top:16px; display:flex; justify-content:space-between; gap:16px; font:500 12px/1.5 system-ui,sans-serif;color:var(--muted); }
     @keyframes roadPulse { to { stroke-dashoffset:-1100; } }
-    @media (max-width:760px) { header{align-items:start;flex-direction:column}.summary{text-align:left}.dates{padding:14px;gap:9px}.dates strong{font-size:15px}.dates span{font-size:10px}.process{grid-template-columns:1fr}.map{min-height:540px;overflow-x:auto}svg{width:860px;height:540px}.itinerary{grid-template-columns:repeat(2,1fr)}.page{padding:16px}.city{font-size:15px}.map::before{display:none} }
+    @media (max-width:760px) {
+      header{align-items:start;flex-direction:column}.summary{text-align:left}
+      .dates{display:grid;grid-template-columns:1fr;padding:14px;gap:5px;text-align:center}.dates .line{display:none}.dates strong,.dates span{white-space:normal;text-align:center}.dates strong{font-size:15px}.dates span{font-size:10px}.process{grid-template-columns:1fr}
+      .map{min-height:0;overflow:hidden}.map svg{width:100%;height:auto;aspect-ratio:1080/610}
+      .map .city{font-size:32px;stroke-width:8px}.map .stay{font-size:24px;stroke-width:7px}
+      .map .car-size{transform:scale(1.8)}
+      .legend{position:static;border-width:1px 0 0;width:100%;gap:8px 12px;padding:10px;font-size:11px}
+      .itinerary{grid-template-columns:repeat(2,1fr)}.page{width:100%;max-width:100vw;padding:16px}.map::before{display:none}
+    }
     @media (prefers-reduced-motion:reduce) { .route-progress{animation:none}.car animateMotion{display:none} }
   </style>
 </head>
@@ -99,10 +107,12 @@
 
       <g class="car" data-direction="连云港→北京" data-orientation="upright" role="button" tabindex="0" aria-pressed="false" aria-label="暂停小车动画">
         <!-- 外层只负责沿路线平移，不旋转；内层到荣成后仅水平翻转，因此轮子始终在下、驾驶舱始终在上。 -->
-        <g class="car-facing">
-          <animateTransform attributeName="transform" type="scale" dur="18s" repeatCount="indefinite" calcMode="discrete" values="1 1;1 1;-1 1;-1 1" keyTimes="0;.489;.49;1"/>
-          <rect class="car-hit" x="-31" y="-26" width="62" height="52" rx="12"/>
-          <g transform="translate(-21 -15)"><path class="car-body" d="M3 15h7l5-8h14l7 8h5l4 4-3 7H1v-8l2-3Z"/><path class="car-window" d="m16 9-4 6h9V9Zm7 0v6h10l-5-6Z"/><path class="headlight" d="M40 17h4l1 3-4 1Z"/><rect class="tail-light" x="1" y="17" width="3" height="5" rx="1"/><circle class="wheel" cx="11" cy="27" r="5"/><circle class="wheel" cx="34" cy="27" r="5"/></g>
+        <g class="car-size">
+          <g class="car-facing">
+            <animateTransform attributeName="transform" type="scale" dur="18s" repeatCount="indefinite" calcMode="discrete" values="1 1;1 1;-1 1;-1 1" keyTimes="0;.489;.49;1"/>
+            <rect class="car-hit" x="-31" y="-26" width="62" height="52" rx="12"/>
+            <g transform="translate(-21 -15)"><path class="car-body" d="M3 15h7l5-8h14l7 8h5l4 4-3 7H1v-8l2-3Z"/><path class="car-window" d="m16 9-4 6h9V9Zm7 0v6h10l-5-6Z"/><path class="headlight" d="M40 17h4l1 3-4 1Z"/><rect class="tail-light" x="1" y="17" width="3" height="5" rx="1"/><circle class="wheel" cx="11" cy="27" r="5"/><circle class="wheel" cx="34" cy="27" r="5"/></g>
+          </g>
         </g>
         <animateMotion dur="18s" repeatCount="indefinite" rotate="0" keyPoints="0;0.095;0.17;0.29;0.54;0.61;0.73;0.79;0.87;1" keyTimes="0;.10;.17;.25;.42;.49;.61;.68;.76;1" calcMode="linear" restart="always" fill="remove"><mpath href="#tripPath"/></animateMotion>
       </g>
